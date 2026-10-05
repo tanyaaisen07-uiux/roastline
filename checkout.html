@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout · Roastline</title>
+<meta name="description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:title" content="Checkout · Roastline">
+<meta property="og:description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:image" content="hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F2EC;overflow-x:hidden}
+a{color:#22180F}a:hover{color:#8A4F26}
+.rl-in{font:inherit;font-size:16px;width:100%;box-sizing:border-box;padding:14px 16px;border-radius:12px;border:1px solid #D6C9B8;background:#FFFFFF;color:#22180F;transition:border-color .2s ease,box-shadow .2s ease}
+.rl-in::placeholder{color:#8C7E70}
+.rl-in:focus{outline:none;border-color:#8A4F26;box-shadow:0 0 0 3px rgba(138,79,38,.14)}
+.rl-btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease}
+.rl-btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -12px rgba(34,24,15,.45)}
+.rl-btn:focus-visible,.rl-ctl:focus-visible{outline:2px solid #8A4F26;outline-offset:3px}
+.rl-ctl{transition:border-color .2s ease}
+.rl-ctl:hover{border-color:#8A4F26}
+.rl-rise{animation:rl-rise .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rl-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rl-draw{transform-origin:left center;animation:rl-draw 1.4s cubic-bezier(.2,.7,.2,1) .4s both}
+@keyframes rl-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion: reduce){.rl-rise,.rl-draw{animation:none}.rl-btn,.rl-in,.rl-ctl{transition:none}}
+</style>
+<script src="morphdom.min.js"></script>
+<script src="runtime.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div style="background: #F6F2EC; color: #22180F; font-family: 'Instrument Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
+
+<header style="border-bottom: 1px solid #E2D7C9">
+<div style="max-width: 1120px; margin: 0 auto; padding: 22px 32px; display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap"><a href="index.html" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 21px; text-decoration: none">Roastline</a><a href="guji.html" style="font-size: 14px; color: #4A3F35">← Back to Ethiopia Guji</a></div>
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #4A3F35"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>Secure checkout</span>
+</div>
+</header>
+
+<!-- CHECKOUT -->
+<sc-if value="{{isForm}}" hint-placeholder-val="{{ true }}">
+<main style="max-width: 1120px; margin: 0 auto; padding: 56px 32px 96px; display: flex; flex-wrap: wrap; gap: 48px 72px; align-items: flex-start">
+
+<form onSubmit="{{submit}}" novalidate="" style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Checkout</div>
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 40px); line-height: 1.1; letter-spacing: -0.03em">Start your subscription</h1>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button type="button" onClick="{{express}}" class="rl-ctl" style="font: inherit; font-weight: 600; cursor: pointer; padding: 13px 0; border-radius: 999px; border: 1px solid #22180F; background: #22180F; color: #F6F2EC">Apple Pay</button>
+<button type="button" onClick="{{express}}" class="rl-ctl" style="font: inherit; font-weight: 600; cursor: pointer; padding: 13px 0; border-radius: 999px; border: 1px solid #D6C9B8; background: #FFFFFF; color: #22180F">Google Pay</button>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; color: #5E5145; font-size: 13px; margin: -16px 0"><span style="flex: 1; height: 1px; background: #E2D7C9"></span>or pay with card<span style="flex: 1; height: 1px; background: #E2D7C9"></span></div>
+
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0; margin-bottom: 12px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 19px">Contact</legend>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Email
+<input class="rl-in" type="email" autocomplete="email" placeholder="you@example.com" value="{{f.email}}" onChange="{{set.email}}" aria-invalid="{{err.emailInv}}" style="border-color: {{err.emailBorder}}"></label>
+<sc-if value="{{err.email}}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size: 13px; color: #A2412A; margin-top: -4px">Enter a valid email so we can send your receipt.</span></sc-if>
+</fieldset>
+
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0; margin-bottom: 12px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 19px">Delivery</legend>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Country
+<select class="rl-in" autocomplete="country-name" value="{{f.country}}" onChange="{{set.country}}"><option>Spain</option><option>Portugal</option><option>France</option><option>Germany</option><option>Netherlands</option><option>United Kingdom</option></select></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Address
+<input class="rl-in" autocomplete="street-address" placeholder="Street and number" value="{{f.address}}" onChange="{{set.address}}" aria-invalid="{{err.addressInv}}" style="border-color: {{err.addressBorder}}"></label>
+<div style="display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">City
+<input class="rl-in" autocomplete="address-level2" value="{{f.city}}" onChange="{{set.city}}" aria-invalid="{{err.cityInv}}" style="border-color: {{err.cityBorder}}"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Postal code
+<input class="rl-in" autocomplete="postal-code" value="{{f.zip}}" onChange="{{set.zip}}" aria-invalid="{{err.zipInv}}" style="border-color: {{err.zipBorder}}"></label>
+</div>
+<sc-if value="{{err.delivery}}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size: 13px; color: #A2412A; margin-top: -4px">Add your full delivery address.</span></sc-if>
+</fieldset>
+
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0; margin-bottom: 12px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 19px">Payment</legend>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 15px"><span style="width: 18px; height: 18px; border-radius: 999px; border: 5px solid #8A4F26; box-sizing: border-box; background: #FFFFFF" aria-hidden="true"></span>Credit or debit card</div>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Card number
+<input class="rl-in" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" value="{{f.card}}" onChange="{{set.card}}" aria-invalid="{{err.cardInv}}" style="font-family: 'JetBrains Mono', monospace; border-color: {{err.cardBorder}}"></label>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">Expiry
+<input class="rl-in" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" value="{{f.exp}}" onChange="{{set.exp}}" aria-invalid="{{err.expInv}}" style="font-family: 'JetBrains Mono', monospace; border-color: {{err.expBorder}}"></label>
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #4A3F35">CVC
+<input class="rl-in" inputmode="numeric" autocomplete="cc-csc" placeholder="123" value="{{f.cvc}}" onChange="{{set.cvc}}" aria-invalid="{{err.cvcInv}}" style="font-family: 'JetBrains Mono', monospace; border-color: {{err.cvcBorder}}"></label>
+</div>
+<sc-if value="{{err.card}}" hint-placeholder-val="{{ false }}"><span role="alert" style="font-size: 13px; color: #A2412A; margin-top: -4px">Check your card details.</span></sc-if>
+<div style="font-size: 13px; color: #5E5145">Secure payment · Your card is saved for future deliveries</div>
+</fieldset>
+
+<div style="display: flex; flex-direction: column; gap: 12px">
+<button type="submit" class="rl-btn" style="font: inherit; font-weight: 500; font-size: 17px; cursor: pointer; border: 0; background: #8A4F26; color: #FFFFFF; padding: 18px 0; border-radius: 999px">Start subscription · {{dueText}}</button>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; font-size: 13px; color: #5E5145">
+<span>By subscribing you agree to be charged {{dueText}} every 4 weeks until you cancel.</span>
+<button type="button" onClick="{{demo}}" style="font: inherit; font-size: 13px; cursor: pointer; background: none; border: 0; padding: 0; color: #8A4F26; text-decoration: underline">Use demo details</button>
+</div>
+</div>
+</form>
+
+<aside aria-label="Order summary" style="flex: 1 1 340px; min-width: 0; position: sticky; top: 32px; background: #FBF8F4; border: 1px solid #E2D7C9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E5145">Your subscription</div>
+<div style="display: flex; gap: 16px; align-items: center">
+<img src="packA.jpg" alt="" style="width: 72px; height: 88px; border-radius: 12px; object-fit: cover; object-position: 50% 62%; background: #E4D8C8; flex: 0 0 auto">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 21px; letter-spacing: -0.01em">Ethiopia Guji</span>
+<span style="font-size: 14px; color: #4A3F35">250 g · Filter</span>
+<span style="font-size: 14px; color: #4A3F35">Every 4 weeks</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; border-top: 1px solid #E2D7C9">
+<div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #EFE6DA; font-size: 15px"><span style="color: #4A3F35">Coffee</span><span>€18.00 <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B5D50; text-decoration: line-through">€19.00</span></span></div>
+<div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #EFE6DA; font-size: 15px"><span style="color: #4A3F35">Shipping</span><span>€3.90</span></div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0 0"><span style="font-weight: 600">Due today</span><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 28px; letter-spacing: -0.02em">{{dueText}}</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #4A3F35; background: #FFFFFF; border-radius: 14px; padding: 14px 16px">
+<span><span style="font-weight: 600; color: #22180F">Ships {{shipDate}}</span> · roasted {{roastDate}}</span>
+<span>Next charge {{nextCharge}} · {{dueText}} every 4 weeks</span>
+<span style="color: #3F5A43">Skip, pause or cancel anytime</span>
+</div>
+</aside>
+</main>
+</sc-if>
+
+<!-- ORDER CONFIRMED -->
+<sc-if value="{{isDone}}" hint-placeholder-val="{{ false }}">
+<main style="max-width: 760px; margin: 0 auto; padding: 88px 32px 112px; display: flex; flex-direction: column; gap: 40px">
+<div class="rl-rise" style="display: flex; flex-direction: column; gap: 14px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #3F5A43">Order confirmed</div>
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(40px, 5vw, 64px); line-height: 1.02; letter-spacing: -0.04em">You're all set.</h1>
+<p style="margin: 0; font-size: 20px; color: #4A3F35">Your first Ethiopia Guji ships {{shipDate}}.</p>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5E5145">250 g · Filter · Every 4 weeks · Receipt sent to {{emailShown}}</div>
+</div>
+
+<div class="rl-rise" style="animation-delay: .15s; border-top: 1px solid #E2D7C9; padding-top: 32px; display: flex; flex-direction: column; gap: 22px">
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 24px; letter-spacing: -0.02em">Your taste profile is ready to learn.</div>
+<div style="position: relative">
+<div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: 7px; height: 1px; background: #E2D7C9"></div>
+<div aria-hidden="true" class="rl-draw" style="position: absolute; left: 0; right: 0; top: 7px; height: 1px; background: #8A4F26"></div>
+<ol style="position: relative; margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr)); gap: 20px">
+<li style="display: flex; flex-direction: column; gap: 10px"><span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 999px; background: #8A4F26"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A4F26">01</span><span style="font-weight: 600">First coffee</span><span style="font-size: 14px; color: #5E5145">Ethiopia Guji, ships {{shipDate}}</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 999px; border: 1px solid #8A4F26; background: #F6F2EC; box-sizing: border-box"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A4F26">02</span><span style="font-weight: 600">Rate it</span><span style="font-size: 14px; color: #5E5145">One tap in My Roastline</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 999px; border: 1px solid #8A4F26; background: #F6F2EC; box-sizing: border-box"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A4F26">03</span><span style="font-weight: 600">We learn</span><span style="font-size: 14px; color: #5E5145">Your profile adjusts</span></li>
+<li style="display: flex; flex-direction: column; gap: 10px"><span aria-hidden="true" style="width: 15px; height: 15px; border-radius: 999px; border: 1px solid #8A4F26; background: #F6F2EC; box-sizing: border-box"></span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A4F26">04</span><span style="font-weight: 600">Your next match</span><span style="font-size: 14px; color: #5E5145">Closer to what you love</span></li>
+</ol>
+</div>
+</div>
+
+<div class="rl-rise" style="animation-delay: .3s; display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<a href="account.html" class="rl-btn" style="text-decoration: none; background: #22180F; color: #F6F2EC; font-weight: 500; padding: 17px 30px; border-radius: 999px">Go to My Roastline →</a>
+<button onClick="{{back}}" style="font: inherit; cursor: pointer; background: none; border: 0; color: #4A3F35; text-decoration: underline; padding: 17px 8px">Back to checkout</button>
+</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #6B5D50">Concept flow · no payment is processed</div>
+</main>
+</sc-if>
+
+<footer style="border-top: 1px solid #E2D7C9">
+<div style="max-width: 1120px; margin: 0 auto; padding: 20px 32px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 13px; color: #5E5145">
+<span>Questions? <a href="mailto:hello@roastline.coffee" style="color: #8A4F26">hello@roastline.coffee</a></span>
+<nav aria-label="Legal" style="display: flex; flex-wrap: wrap; gap: 6px 20px"><a href="#" style="color: #5E5145; text-decoration: none">Privacy</a><a href="#" style="color: #5E5145; text-decoration: none">Terms</a><a href="#" style="color: #5E5145; text-decoration: none">Subscription policy</a></nav>
+</div>
+</footer>
+
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { done: false, tried: false, f: { email: '', country: 'Spain', address: '', city: '', zip: '', card: '', exp: '', cvc: '' } };
+  }
+  renderVals() {
+    const st = this.state, f = st.f;
+    const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const fmtW = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const now = new Date(); now.setHours(12, 0, 0, 0);
+    const toTue = (2 - now.getDay() + 7) % 7 || 7;
+    const roastD = new Date(now); roastD.setDate(now.getDate() + toTue);
+    const shipD = new Date(roastD); shipD.setDate(roastD.getDate() + 2);
+    const nextD = new Date(now); nextD.setDate(now.getDate() + 28);
+    const digits = (v) => (v || '').replace(/\D/g, '');
+    const bad = {
+      email: !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email),
+      address: f.address.trim().length < 3, city: f.city.trim().length < 2, zip: f.zip.trim().length < 3,
+      card: digits(f.card).length < 15, exp: !/^\d{2}\s*\/\s*\d{2}$/.test(f.exp.trim()), cvc: digits(f.cvc).length < 3
+    };
+    const show = (k) => st.tried && bad[k];
+    const err = { email: show('email'), delivery: show('address') || show('city') || show('zip'), card: show('card') || show('exp') || show('cvc') };
+    ['email', 'address', 'city', 'zip', 'card', 'exp', 'cvc'].forEach((k) => { err[k + 'Inv'] = show(k) ? 'true' : 'false'; err[k + 'Border'] = show(k) ? '#A2412A' : '#D6C9B8'; });
+    const set = {};
+    Object.keys(f).forEach((k) => { set[k] = (e) => this.setState({ f: Object.assign({}, this.state.f, { [k]: e.target.value }) }); });
+    const ok = !Object.keys(bad).some((k) => bad[k]);
+    return {
+      isForm: !st.done, isDone: st.done, f, set, err,
+      dueText: '€21.90', shipDate: fmtW(shipD), roastDate: fmtW(roastD), nextCharge: fmt(nextD),
+      emailShown: f.email || 'your email',
+      submit: (e) => { if (e && e.preventDefault) e.preventDefault(); if (ok) { this.setState({ done: true }); } else { this.setState({ tried: true }); } },
+      express: () => this.setState({ done: true, f: Object.assign({}, f, { email: f.email || 'alex@example.com' }) }),
+      demo: () => this.setState({ tried: false, f: { email: 'alex@example.com', country: 'Spain', address: 'Carrer de Mallorca 214', city: 'Barcelona', zip: '08008', card: '4242 4242 4242 4821', exp: '08 / 28', cvc: '123' } }),
+      back: () => this.setState({ done: false })
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>

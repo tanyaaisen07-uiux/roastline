@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline · Coffee that learns your taste</title>
+<meta name="description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:title" content="Roastline · Coffee that learns your taste">
+<meta property="og:description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:image" content="hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F2EC;overflow-x:hidden}
+a{color:#22180F}a:hover{color:#8A4F26}
+.rl-nav a{text-decoration:none;transition:color .2s ease}
+.rl-btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease,border-color .25s ease}
+.rl-btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -12px rgba(34,24,15,.45)}
+.rl-btn:focus-visible,.rl-ctl:focus-visible{outline:2px solid #8A4F26;outline-offset:3px}
+.rl-btn .rl-arr{display:inline-block;transition:transform .25s ease}
+.rl-btn:hover .rl-arr{transform:translateX(5px)}
+.rl-btn{position:relative}
+.rl-btn::after{content:"";position:absolute;left:26px;right:26px;bottom:9px;height:1px;background:currentColor;opacity:.45;transform:scaleX(0);transform-origin:left center;transition:transform .35s ease}
+.rl-btn:hover::after{transform:scaleX(1)}
+.rl-ctl{transition:background-color .2s ease,border-color .2s ease,color .2s ease}
+.rl-ctl:hover{border-color:#8A4F26}
+.rl-rise{animation:rl-rise .9s cubic-bezier(.2,.7,.2,1) both}
+.rl-d1{animation-delay:.12s}.rl-d2{animation-delay:.24s}.rl-d3{animation-delay:.36s}.rl-d4{animation-delay:.5s}
+@keyframes rl-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.rl-draw{transform-origin:left center;animation:rl-draw 1.2s cubic-bezier(.2,.7,.2,1) .55s both}
+@keyframes rl-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.rl-line{height:1px;transform-origin:left center;transition:transform 1.3s cubic-bezier(.2,.7,.2,1)}
+.rl-swap{transition:opacity .22s ease}
+.rl-jimg img{transition:opacity .7s ease}
+.rl-ticker{display:flex;gap:48px;width:max-content;animation:rl-scroll 60s linear infinite}
+.rl-tickwrap:hover .rl-ticker,.rl-tickwrap:focus-within .rl-ticker{animation-play-state:paused}
+@keyframes rl-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+input[type=range]{transition:accent-color .2s ease}
+@media (min-width: 900px){.rl-h1{font-weight:300 !important}}
+@media (max-width: 720px){
+.rl-navlink{display:none}
+.rl-heroimg{padding-bottom:0 !important}
+.rl-jimg{position:relative !important;top:auto !important}
+.rl-match{position:relative !important;left:auto !important;bottom:auto !important;width:auto !important;margin:-48px 14px 0 14px !important;padding:16px 18px !important}
+}
+@media (prefers-reduced-motion: reduce){.rl-ticker{animation:none}.rl-btn,.rl-ctl,.rl-line,.rl-swap,.rl-jimg img{transition:none !important}.rl-rise,.rl-draw{animation:none}.rl-btn::after{transition:none}}
+</style>
+<script src="morphdom.min.js"></script>
+<script src="runtime.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div style="background: #F6F2EC; color: #22180F; font-family: 'Instrument Sans', sans-serif; font-size: 17px; line-height: 1.6">
+
+<header style="max-width: 1280px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="#top" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em; text-decoration: none; color: #22180F">Roastline</a>
+<nav class="rl-nav" style="display: flex; flex-wrap: wrap; align-items: center; gap: 32px; font-size: 15px">
+<a class="rl-navlink" href="#experience">Experience</a>
+<a class="rl-navlink" href="guji.html">Our coffee</a>
+<a class="rl-navlink" href="#plans">Plans</a>
+<a class="rl-navlink" href="#faq">FAQ</a>
+<a href="quiz.html" class="rl-btn" style="background: #22180F; color: #F6F2EC; padding: 12px 22px; border-radius: 999px; font-weight: 500">Take the taste quiz</a>
+</nav>
+</header>
+
+<!-- HERO -->
+<section id="top" style="max-width: 1280px; margin: 0 auto; padding: 40px 32px 104px; display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div class="rl-rise" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Personalized specialty coffee</div>
+<h1 class="rl-rise rl-d1 rl-h1" style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(44px, 6vw, 88px); line-height: 1; letter-spacing: -0.04em">Coffee that learns your taste.</h1>
+<div aria-hidden="true" class="rl-draw" style="width: 120px; height: 2px; background: #8A4F26; margin: -6px 0 -4px"></div>
+<p class="rl-rise rl-d2" style="margin: 0; max-width: 470px; font-size: 20px; color: #4A3F35">Specialty coffee, personalized to you and refined with every cup.</p>
+<div class="rl-rise rl-d3" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<a href="quiz.html" class="rl-btn" style="display: inline-block; text-decoration: none; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 17px 32px; border-radius: 999px">Discover my coffee <span class="rl-arr">→</span></a>
+<a href="guji.html" style="font-weight: 500; padding: 17px 8px">See this month's coffee</a>
+</div>
+<div style="font-size: 14px; color: #5E5145">2-minute quiz · No commitment · Skip or pause anytime</div>
+</div>
+<div class="rl-heroimg rl-rise rl-d2" style="flex: 1 1 480px; min-width: 0; position: relative; padding-bottom: 56px">
+<div class="rl-frame" style="border-radius: 28px; overflow: hidden; background: #E4D8C8">
+<img src="hero.jpg" alt="Pour-over coffee by a window in soft morning light" style="display: block; aspect-ratio: 4 / 5; max-height: 660px; width: 100%; object-fit: cover; object-position: 50% 30%">
+</div>
+<a href="guji.html" class="rl-match" style="position: absolute; left: -24px; bottom: 0; width: 300px; box-sizing: border-box; background: #FFFFFF; border-radius: 20px; padding: 20px 22px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #22180F; box-shadow: 0 24px 48px -24px rgba(34,24,15,0.35), 0 2px 6px rgba(34,24,15,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A4F26">Your match</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 30px; font-weight: 500; letter-spacing: -0.04em; line-height: 1">94%</span>
+</div>
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 21px; letter-spacing: -0.01em; line-height: 1.2">Ethiopia Guji</div>
+<div style="font-size: 14px; color: #4A3F35">Blueberry · Jasmine · Citrus</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5E5145; border-top: 1px solid #EFE6DA; padding-top: 8px; margin-top: 4px">Based on your taste profile</div>
+</a>
+</div>
+</section>
+
+<!-- TRUST STRIP + ROASTER TICKER -->
+<section style="border-top: 1px solid #E2D7C9; border-bottom: 1px solid #E2D7C9; background: #FBF8F4">
+<div style="max-width: 1280px; margin: 0 auto; padding: 16px 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; font-size: 14px; color: #4A3F35; text-align: center">
+<span>Independent specialty roasters</span><span aria-hidden="true" style="color: #A8988A">·</span><span>Freshly roasted</span><span aria-hidden="true" style="color: #A8988A">·</span><span>Shipped within 48h</span><span aria-hidden="true" style="color: #A8988A">·</span><span>Skip or pause anytime</span>
+</div>
+<div class="rl-tickwrap" tabindex="0" aria-label="Concept partner roasters" style="border-top: 1px solid #EFE6DA; padding: 11px 0; overflow: hidden; display: flex; align-items: center; gap: 28px; outline: none">
+<div style="flex: 0 0 auto; padding-left: 32px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Concept roaster network</div>
+<div style="flex: 1 1 auto; overflow: hidden; min-width: 0">
+<div class="rl-ticker" style="gap: 48px; font-size: 13px; white-space: nowrap">
+<sc-for list="{{roasters}}" as="r" hint-placeholder-count="12">
+<span aria-hidden="{{r.hidden}}"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; letter-spacing: 0.14em; color: #22180F">{{r.name}}</span><span style="color: #5E5145">&nbsp;&nbsp;{{r.city}}</span></span>
+</sc-for>
+</div>
+</div>
+</div>
+</section>
+
+<!-- THE EXPERIENCE -->
+<section id="experience" style="background: #22180F; color: #F6F2EC">
+<div style="max-width: 1280px; margin: 0 auto; padding: 128px 32px; display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div aria-hidden="true" class="rl-line" style="width: 96px; background: #D9A877; transform: scaleX({{lineExp}})"></div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #D9A877">The experience</div>
+<h2 style="margin: 0; max-width: 620px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">Every cup makes the next one better.</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-start; max-width: 360px"><p style="margin: 0; color: #D6C9BA">A loop, not a quiz. Tap a step to see what happens.</p><button onClick="{{playLoop}}" class="rl-ctl" style="font: inherit; font-size: 14px; cursor: pointer; background: none; border: 1px solid #5A4A3B; color: #F6F2EC; padding: 9px 16px; border-radius: 999px">Play the loop ↻</button></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 12px; flex: 1 1 160px">
+<button onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" class="rl-ctl" style="flex: 1 1 auto; font: inherit; cursor: pointer; text-align: left; padding: 22px; border-radius: 20px; border: 1px solid {{s.border}}; background: {{s.bg}}; color: {{s.fg}}; display: flex; flex-direction: column; gap: 6px; min-height: 108px; transition: background-color .35s ease, color .35s ease, border-color .35s ease">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: 0.75">{{s.num}}</span>
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 22px; letter-spacing: -0.01em">{{s.title}}</span>
+</button>
+<span style="color: #A8988A; font-size: 22px" aria-hidden="true">{{s.arrow}}</span>
+</div>
+</sc-for>
+</div>
+<div aria-hidden="true" style="position: relative; height: 2px; border-radius: 999px; background: #3A2E24; margin-top: -32px">
+<div style="height: 2px; border-radius: 999px; background: #D9A877; width: {{loopW}}"></div>
+<div style="position: absolute; top: -4px; left: calc({{loopW}} - 5px); width: 10px; height: 10px; border-radius: 999px; background: #D9A877"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-end; border-top: 1px solid #4A3B2E; padding-top: 32px; margin-top: -24px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #D9A877">{{activeWho}}</div>
+<div aria-live="polite" style="font-family: 'Hanken Grotesk', sans-serif; font-size: clamp(22px, 2.4vw, 30px); line-height: 1.35; letter-spacing: -0.01em; min-height: 2.7em">{{activeDesc}}</div>
+</div>
+<div style="flex: 0 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #D6C9BA"><span>Profile accuracy</span><span>{{accLabel}}</span></div>
+<div style="height: 4px; border-radius: 999px; background: #3A2E24"><div style="height: 4px; border-radius: 999px; background: #D9A877; width: {{accW}}; transition: width .6s ease"></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 120px 32px 0; display: flex; flex-wrap: wrap; gap: 48px 88px; align-items: flex-start">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Crafted by masters, loved by drinkers</div>
+<h2 style="margin: 0; max-width: 520px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(28px, 3.2vw, 42px); line-height: 1.12; letter-spacing: -0.03em">Coffee from independent specialty roasters, matched to your taste.</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 40px; padding-top: 8px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500">94%</span><span style="font-size: 14px; color: #4A3F35">average first-match accuracy</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500">15k+</span><span style="font-size: 14px; color: #4A3F35">cups rated</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 500">48h</span><span style="font-size: 14px; color: #4A3F35">fresh roast dispatch</span></div>
+</div>
+</div>
+<figure style="flex: 1 1 460px; min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 22px; padding-top: 6px">
+<blockquote aria-live="polite" style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(23px, 2.5vw, 32px); line-height: 1.3; letter-spacing: -0.02em; min-height: 3.9em">“{{quote.text}}”</blockquote>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; border-top: 1px solid #E2D7C9; padding-top: 16px">
+<figcaption style="display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600">{{quote.name}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145">{{quote.meta}}</span></figcaption>
+<div style="display: flex; align-items: center; gap: 4px">
+<button onClick="{{quotePrev}}" aria-label="Previous testimonial" class="rl-ctl" style="font: inherit; cursor: pointer; width: 44px; height: 44px; border-radius: 999px; border: 1px solid #DCCFBF; background: transparent; color: #22180F">←</button>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145; min-width: 56px; text-align: center">{{quoteIdx}}</span>
+<button onClick="{{quoteNext}}" aria-label="Next testimonial" class="rl-ctl" style="font: inherit; cursor: pointer; width: 44px; height: 44px; border-radius: 999px; border: 1px solid #DCCFBF; background: transparent; color: #22180F">→</button>
+</div>
+</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #5E5145">Concept testimonials and figures · demonstration brand</div>
+</figure>
+</section>
+
+<!-- TASTE PROFILE + YOUR MATCH -->
+<section id="profile" style="max-width: 1280px; margin: 0 auto; padding: 120px 32px 128px; display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 640px">
+<div aria-hidden="true" class="rl-line" style="width: 96px; background: #8A4F26; transform: scaleX({{lineProfile}})"></div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Taste profile</div>
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">Move the sliders. Meet your coffee.</h2>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: stretch">
+<div style="flex: 1 1 480px; min-width: 0; background: #FFFFFF; border: 1px solid #E2D7C9; border-radius: 28px; padding: clamp(24px, 4vw, 48px); display: flex; flex-direction: column; gap: 32px">
+<sc-for list="{{dims}}" as="d" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px"><span>{{d.left}}</span><span>{{d.right}}</span></div>
+<input class="rl-ctl" type="range" min="0" max="100" step="1" value="{{d.value}}" onChange="{{d.set}}" aria-label="{{d.label}}" aria-valuetext="{{d.hint}}" style="width: 100%; height: 28px; accent-color: #8A4F26; cursor: pointer; margin: 0">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{d.hintColor}}; transition: color .3s ease">{{d.hint}}</div>
+</div>
+</sc-for>
+<div style="font-size: 14px; color: #5E5145; border-top: 1px solid #EFE6DA; padding-top: 16px">A quick preview. The full quiz also asks how you brew and how much you drink.</div>
+</div>
+<div style="flex: 1 1 360px; min-width: 0; background: #22180F; color: #F6F2EC; border-radius: 28px; padding: clamp(24px, 4vw, 48px); display: flex; flex-direction: column; gap: 22px; box-shadow: 0 0 0 {{ring}} rgba(217,168,119,0.28), 0 40px 80px -40px rgba(34,24,15,0.6); transition: box-shadow .45s ease">
+<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #D9A877">Your match</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: clamp(54px, 6vw, 84px); letter-spacing: -0.06em; line-height: 0.9">{{shownPct}}%</div>
+</div>
+<div style="flex: 0 0 auto; width: 76px; height: 100px; border-radius: 8px 8px 12px 12px; background: #C9A882; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 10px 0 #B8956E, 0 20px 30px -16px rgba(0,0,0,0.6)">
+<div style="width: 54px; background: #FBF8F4; color: #22180F; border-radius: 4px; padding: 7px 4px; text-align: center; font-family: 'Hanken Grotesk', sans-serif; font-size: 9px; font-weight: 600; line-height: 1.25">Roastline<br><span style="font-weight: 400; color: #5E5145">{{match.short}}</span></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div class="rl-swap" style="display: flex; flex-direction: column; gap: 6px; opacity: {{matchOp}}">
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 30px; letter-spacing: -0.02em; line-height: 1.1">{{match.name}}</div>
+<div style="font-size: 16px; color: #D6C9BA">{{match.notes}}</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #B8A99A">{{match.meta}}</div>
+</div>
+</div>
+<div style="height: 6px; border-radius: 999px; background: #3A2E24"><div style="height: 6px; border-radius: 999px; background: #D9A877; width: {{matchBar}}; transition: width .45s ease"></div></div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+<a href="quiz.html" class="rl-btn" style="text-align: center; text-decoration: none; background: #F6F2EC; color: #22180F; font-weight: 500; padding: 16px 0; border-radius: 999px">Refine in the full quiz <span class="rl-arr">→</span></a>
+<sc-if value="{{match.isGuji}}" hint-placeholder-val="{{ true }}"><a href="guji.html" style="text-align: center; color: #F6F2EC; font-size: 15px; padding: 6px 0">See Ethiopia Guji details</a></sc-if>
+</div>
+</div>
+</div>
+</section>
+
+<!-- PLANS -->
+<section id="plans" style="max-width: 1280px; margin: 0 auto; padding: 128px 32px; display: flex; flex-direction: column; gap: 44px">
+<div style="display: flex; flex-direction: column; gap: 14px; align-items: center; text-align: center">
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">Choose how deep you go.</h2>
+<p style="margin: 0; max-width: 480px; color: #4A3F35">Prices are per delivery, 5% below buying the same bags one-time. Not sure? The quiz recommends a plan.</p>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Delivery frequency</div>
+<div role="radiogroup" aria-label="Delivery frequency" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 4px; border-radius: 999px; background: #EFE6DA">
+<sc-for list="{{freqs}}" as="f" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{f.checked}}" onClick="{{f.pick}}" class="rl-ctl" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 18px; border-radius: 999px; border: 1px solid {{f.border}}; background: {{f.bg}}; color: #22180F; display: flex; align-items: center; gap: 8px; box-shadow: {{f.shadow}}">{{f.label}}<sc-if value="{{f.popular}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #8A4F26">Most popular</span></sc-if></button>
+</sc-for>
+</div>
+<div style="font-size: 14px; color: #5E5145">Choose your pace. Change, skip or pause anytime.</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; align-items: stretch">
+<sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
+<div style="background: {{p.bg}}; color: {{p.fg}}; border: 1px solid {{p.border}}; border-radius: 24px; padding: 34px; display: flex; flex-direction: column; gap: 18px; box-shadow: {{p.shadow}}">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: {{p.muted}}">{{p.name}}</div><sc-if value="{{p.featured}}" hint-placeholder-val="{{ false }}"><span style="font-size: 12px; background: #F3E6C9; color: #22180F; padding: 5px 12px; border-radius: 999px; font-weight: 600">Most picked</span></sc-if></div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 44px; letter-spacing: -0.03em; line-height: 1.1">{{p.price}}</span><span style="font-size: 16px; color: {{p.muted}}">/ delivery</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; color: {{p.muted}}; text-decoration: line-through">{{p.was}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; border-radius: 999px; background: {{p.badgeBg}}; color: {{p.badgeFg}}">Save 5%</span></div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{p.muted}}">{{p.qty}} · every {{freqWeeks}} weeks</div>
+</div>
+<div style="color: {{p.body}}">{{p.desc}}</div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 15px">
+<sc-for list="{{p.items}}" as="it" hint-placeholder-count="4"><li style="display: flex; gap: 10px; align-items: baseline"><span style="color: {{p.check}}" aria-hidden="true">✓</span><span>{{it.t}}</span></li></sc-for>
+</ul>
+<a href="quiz.html" class="rl-btn" style="margin-top: auto; text-align: center; text-decoration: none; font-weight: 500; padding: 15px 0; border-radius: 999px; border: 1px solid {{p.ctaBorder}}; background: {{p.ctaBg}}; color: {{p.ctaFg}}">Choose {{p.name}}</a>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; font-size: 14px; color: #4A3F35">
+<div>Freshly roasted · Ships within 48h · Free delivery on orders over €30, otherwise shipping calculated at checkout</div>
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 17px; color: #22180F">Didn't love it? Tell us. Your next match gets smarter.</div>
+</div>
+</section>
+
+<!-- YOUR DASHBOARD (product preview) -->
+<section style="background: #E9DCC9">
+<div style="max-width: 1280px; margin: 0 auto; padding: 128px 32px; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 640px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #7A4520">My Roastline</div>
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">Everything about your coffee, in one place.</h2>
+<p style="margin: 0; color: #3F352C">Try the controls. This is how managing a subscription should feel. <a href="account.html" style="color: #7A4520; font-weight: 500">Open My Roastline →</a></p>
+</div>
+<div style="background: #FBF8F4; border-radius: 28px; padding: clamp(16px, 3vw, 32px); box-shadow: 0 40px 80px -40px rgba(34,24,15,0.45); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 20px">
+<div style="grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 16px 48px; align-items: center; padding: 4px 8px 12px; border-bottom: 1px solid #E2D7C9">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Next delivery</span><span style="font-weight: 600">{{dash.next}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Plan</span><span style="font-weight: 600">Explorer · €36 / delivery</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Frequency</span><span style="font-weight: 600">Every 4 weeks</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Next charge</span><span style="font-weight: 600">{{dash.charge}}</span></div>
+<div style="margin-left: auto; font-size: 14px; color: #4A3F35">{{dash.status}}</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 18px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Current coffee</div>
+<div style="display: flex; gap: 16px; align-items: center">
+<div style="flex: 0 0 auto; width: 52px; height: 68px; border-radius: 6px 6px 9px 9px; background: #C9A882; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 7px 0 #B8956E">
+<div style="width: 36px; background: #FBF8F4; border-radius: 3px; padding: 4px 2px; text-align: center; font-family: 'Hanken Grotesk', sans-serif; font-size: 6px; font-weight: 600; line-height: 1.2">Roastline<br><span style="font-weight: 400; color: #5E5145">{{dash.short}}</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 23px; letter-spacing: -0.02em">{{dash.coffee}}</div><div style="font-size: 14px; color: #4A3F35">{{dash.notes}}</div></div>
+</div>
+<sc-if value="{{dash.rateOpen}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Rate this coffee" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{dash.rateOpts}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" class="rl-ctl" style="font: inherit; font-size: 14px; padding: 11px 4px; border-radius: 12px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{o.label}}</button></sc-for>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: auto">
+<button onClick="{{dash.toggleRate}}" class="rl-btn" style="font: inherit; font-size: 15px; padding: 14px 0; border-radius: 999px; border: 0; background: #22180F; color: #F6F2EC; font-weight: 500; cursor: pointer">{{dash.rateLabel}}</button>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{dash.toggleSwap}}" class="rl-ctl" style="font: inherit; font-size: 15px; padding: 14px 0; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{dash.swapLabel}}</button>
+<button onClick="{{dash.toggleSkip}}" class="rl-ctl" style="font: inherit; font-size: 15px; padding: 14px 0; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{dash.skipLabel}}</button>
+</div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 18px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145">Taste profile</div>
+<sc-for list="{{dims}}" as="d" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 13px; color: #4A3F35"><span>{{d.left}}</span><span>{{d.right}}</span></div>
+<div style="position: relative; height: 6px; border-radius: 999px; background: #EFE6DA"><div style="position: absolute; top: -4px; width: 14px; height: 14px; border-radius: 999px; background: #8A4F26; left: {{d.pos}}; transition: left .35s ease"></div></div>
+</div>
+</sc-for>
+<div style="font-size: 13px; color: #5E5145; margin-top: auto">{{dash.profileNote}}</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 26px; display: flex; flex-direction: column; gap: 6px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #5E5145; margin-bottom: 8px">Previous coffees</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #EFE6DA"><div><div style="font-weight: 500">Colombia Huila</div><div style="font-size: 13px; color: #5E5145">Red apple · Caramel</div></div><span style="font-size: 13px; background: #E0E8D9; padding: 4px 10px; border-radius: 999px; white-space: nowrap">Loved it</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #EFE6DA"><div><div style="font-weight: 500">Kenya Nyeri</div><div style="font-size: 13px; color: #5E5145">Blackcurrant · Grapefruit</div></div><span style="font-size: 13px; background: #E0E8D9; padding: 4px 10px; border-radius: 999px; white-space: nowrap">Loved it</span></div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0"><div><div style="font-weight: 500">Brazil Cerrado</div><div style="font-size: 13px; color: #5E5145">Milk chocolate · Hazelnut</div></div><span style="font-size: 13px; background: #F2DCD6; padding: 4px 10px; border-radius: 999px; white-space: nowrap">Not for me</span></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ORIGIN STORY -->
+<section id="origin" style="max-width: 1280px; margin: 0 auto; padding: 128px 32px; display: flex; flex-direction: column; gap: 56px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div aria-hidden="true" class="rl-line" style="width: 96px; background: #8A4F26; transform: scaleX({{lineOrigin}})"></div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Origin story · Ethiopia Guji</div>
+<h2 style="margin: 0; max-width: 620px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">From a hillside farm to your cup.</h2>
+</div>
+<a href="guji.html" class="rl-btn" style="text-decoration: none; font-weight: 500; padding: 14px 24px; border-radius: 999px; border: 1px solid #22180F">Explore this coffee <span class="rl-arr">→</span></a>
+</div>
+<div style="display: flex; flex-wrap: wrap; flex-direction: row-reverse; gap: 48px 80px; align-items: flex-start">
+<div class="rl-jimg" style="flex: 1 1 440px; min-width: 0; position: sticky; top: 96px">
+<div style="position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 4 / 5; max-height: 640px; background: #E4D8C8">
+<sc-for list="{{journey}}" as="j" hint-placeholder-count="5">
+<img src="{{j.src}}" alt="{{j.alt}}" aria-hidden="{{j.hidden}}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{j.pos}}; opacity: {{j.op}}">
+</sc-for>
+</div>
+</div>
+<ol style="flex: 1 1 360px; min-width: 0; margin: 0; padding: 8px 0 0; list-style: none; position: relative">
+<div aria-hidden="true" style="position: absolute; left: 7px; top: 16px; bottom: 120px; width: 1px; background: #E2D7C9"><div style="width: 1px; background: #8A4F26; height: {{jFill}}; transition: height .7s ease"></div></div>
+<sc-for list="{{journey}}" as="j" hint-placeholder-count="5">
+<li id="{{j.id}}" style="position: relative; padding: 0 0 0 44px; min-height: 210px; display: flex; flex-direction: column; gap: 8px">
+<span aria-hidden="true" style="position: absolute; left: 0; top: 4px; width: 15px; height: 15px; box-sizing: border-box; border-radius: 999px; border: 1px solid {{j.dotBorder}}; background: {{j.dotBg}}; transition: background-color .45s ease, border-color .45s ease"></span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: {{j.numColor}}; transition: color .45s ease">{{j.num}} · {{j.title}}</span>
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(22px, 2.2vw, 28px); line-height: 1.2; letter-spacing: -0.02em; color: {{j.headColor}}; transition: color .45s ease">{{j.head}}</span>
+<span style="max-width: 420px; color: {{j.bodyColor}}; transition: color .45s ease">{{j.text}}</span>
+</li>
+</sc-for>
+</ol>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="border-top: 1px solid #E2D7C9">
+<div style="max-width: 1280px; margin: 0 auto; padding: 112px 32px; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.03em">Questions</h2>
+<div style="display: flex; flex-direction: column; gap: 6px; max-width: 320px; color: #4A3F35">
+<span style="font-weight: 600; color: #22180F">Still deciding which plan is right for you?</span>
+<span>Our barista team can help you choose.</span>
+<a href="mailto:hello@roastline.coffee" style="color: #8A4F26; font-weight: 500">hello@roastline.coffee</a>
+</div>
+</div>
+<div style="flex: 2 1 520px; min-width: 0; display: flex; flex-direction: column">
+<sc-for list="{{faq}}" as="q" hint-placeholder-count="5">
+<div style="border-top: 1px solid #E2D7C9">
+<button onClick="{{q.toggle}}" aria-expanded="{{q.expanded}}" class="rl-ctl" style="width: 100%; font: inherit; cursor: pointer; background: none; border: 0; color: #22180F; padding: 22px 0; display: flex; justify-content: space-between; align-items: center; gap: 16px; text-align: left">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 19px">{{q.q}}</span>
+<span style="font-size: 22px; color: #8A4F26; display: inline-block; transition: transform .25s ease; transform: {{q.rot}}" aria-hidden="true">+</span>
+</button>
+<sc-if value="{{q.open}}" hint-placeholder-val="{{ false }}"><p style="margin: 0 0 24px; max-width: 620px; color: #4A3F35">{{q.a}}</p></sc-if>
+</div>
+</sc-for>
+<div style="border-top: 1px solid #E2D7C9"></div>
+</div>
+</div>
+</section>
+
+<!-- FINAL CTA -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 0 32px 112px">
+<div style="background: #22180F; color: #F6F2EC; border-radius: 32px; padding: clamp(48px, 7vw, 104px) clamp(24px, 6vw, 80px); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 28px">
+<h2 style="margin: 0; max-width: 820px; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.04em">Your next favorite coffee is already out there.</h2>
+<p style="margin: 0; font-size: 22px; color: #D9A877">Let's find it.</p>
+<a href="quiz.html" class="rl-btn" style="text-decoration: none; background: #F6F2EC; color: #22180F; font-weight: 500; padding: 18px 34px; border-radius: 999px">Discover my coffee <span class="rl-arr">→</span></a>
+</div>
+</section>
+
+<footer style="border-top: 1px solid #E2D7C9">
+<div style="max-width: 1280px; margin: 0 auto; padding: 48px 32px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 28px 64px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: #22180F">Roastline</span>
+<span style="font-size: 15px; color: #4A3F35">Specialty coffee, matched to your taste.</span>
+<a href="mailto:hello@roastline.coffee" style="font-size: 15px; font-weight: 500; color: #8A4F26">hello@roastline.coffee</a>
+</div>
+<nav aria-label="Footer" style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px">
+<a href="#" style="color: #4A3F35; text-decoration: none">Instagram</a>
+<a href="mailto:hello@roastline.coffee" style="color: #4A3F35; text-decoration: none">Contact</a>
+<a href="#faq" style="color: #4A3F35; text-decoration: none">FAQ</a>
+</nav>
+</div>
+<div style="max-width: 1280px; margin: 0 auto; padding: 18px 32px 32px; border-top: 1px solid #EFE6DA; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 24px">
+<nav aria-label="Legal" style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px">
+<a href="#" style="color: #5E5145; text-decoration: none">Privacy</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Terms</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Subscription policy</a>
+</nav>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6B5D50">Concept brand · Created as a demonstration · 2026</span>
+</div>
+</footer>
+
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 0, fruity: 30, roast: 25, floral: 30, faqOpen: 0, freq: 4, shownPct: null, pulse: false, rateOpen: false, rated: null, swapped: false, skipped: false, qi: 0, loopP: 0, seen: {}, jActive: 0, shownMatch: null, matchOp: 1 };
+    this._raf = null; this._pulseT = null; this._target = null; this._loopRaf = null; this._played = false; this._swapT = null; this._shownName = null;
+    this._reduce = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this._onScroll = () => {
+      const vh = window.innerHeight || 800;
+      const seen = Object.assign({}, this.state.seen);
+      let changed = false;
+      ['experience', 'profile', 'origin'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el && !seen[id] && el.getBoundingClientRect().top < vh * 0.8) { seen[id] = true; changed = true; }
+      });
+      const exp = document.getElementById('experience');
+      if (exp && !this._played && exp.getBoundingClientRect().top < vh * 0.55) { this._played = true; this.playLoop(); }
+      let act = 0;
+      for (let i = 0; i < 5; i++) { const li = document.getElementById('journey-' + i); if (li && li.getBoundingClientRect().top < vh * 0.55) act = i; }
+      if (changed || act !== this.state.jActive) this.setState({ seen, jActive: act });
+    };
+  }
+  computeMatch() {
+    const st = this.state;
+    const coffees = [
+      { name: 'Ethiopia Guji', short: 'Guji', notes: 'Blueberry · Jasmine · Citrus', meta: 'Washed · Light roast', f: 25, r: 25, n: 25 },
+      { name: 'Kenya Nyeri', short: 'Nyeri', notes: 'Blackcurrant · Grapefruit · Brown sugar', meta: 'Washed · Light-medium roast', f: 15, r: 40, n: 45 },
+      { name: 'Colombia Huila', short: 'Huila', notes: 'Red apple · Caramel · Cocoa', meta: 'Washed · Medium roast', f: 55, r: 50, n: 55 },
+      { name: 'Guatemala Huehuetenango', short: 'Huehue', notes: 'Plum · Dark chocolate · Almond', meta: 'Washed · Medium-dark roast', f: 70, r: 65, n: 70 },
+      { name: 'Brazil Cerrado', short: 'Cerrado', notes: 'Milk chocolate · Hazelnut · Toffee', meta: 'Natural · Dark roast', f: 88, r: 80, n: 88 }
+    ];
+    let best = coffees[0], bestD = 1e9;
+    coffees.forEach((c) => {
+      const d = Math.sqrt(Math.pow(c.f - st.fruity, 2) + Math.pow(c.r - st.roast, 2) + Math.pow(c.n - st.floral, 2));
+      if (d < bestD) { bestD = d; best = c; }
+    });
+    const pct = Math.max(62, Math.min(99, Math.round(100 - bestD * 0.85)));
+    return { best, pct };
+  }
+  componentDidMount() {
+    const m = this.computeMatch();
+    this._target = m.pct; this._shownName = m.best.name;
+    this.setState({ shownPct: m.pct, shownMatch: m.best });
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+  }
+  playLoop() {
+    if (this._loopRaf) cancelAnimationFrame(this._loopRaf);
+    if (this._reduce()) { this.setState({ loopP: 0.2, step: 0 }); return; }
+    const start = Date.now(), dur = 3000, back = 600;
+    const tick = () => {
+      const t = Date.now() - start;
+      if (t < dur) {
+        const p = t / dur;
+        const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        this.setState({ loopP: e, step: Math.min(4, Math.floor(e * 5)) });
+        this._loopRaf = requestAnimationFrame(tick);
+      } else if (t < dur + back) {
+        const k = (t - dur) / back;
+        this.setState({ loopP: 1 - (1 - Math.pow(1 - k, 3)) * 0.8, step: 0 });
+        this._loopRaf = requestAnimationFrame(tick);
+      } else { this.setState({ loopP: 0.2, step: 0 }); this._loopRaf = null; }
+    };
+    this._loopRaf = requestAnimationFrame(tick);
+  }
+  componentDidUpdate() {
+    const m = this.computeMatch();
+    if (m.pct !== this._target) {
+      this._target = m.pct;
+      this.tweenTo(m.pct);
+      this.setState({ pulse: true });
+      clearTimeout(this._pulseT);
+      this._pulseT = setTimeout(() => this.setState({ pulse: false }), 420);
+    }
+    if (m.best.name !== this._shownName) {
+      this._shownName = m.best.name;
+      if (this._reduce()) { this.setState({ shownMatch: m.best }); return; }
+      this.setState({ matchOp: 0 });
+      clearTimeout(this._swapT);
+      this._swapT = setTimeout(() => this.setState({ shownMatch: m.best, matchOp: 1 }), 220);
+    }
+  }
+  componentWillUnmount() {
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._loopRaf) cancelAnimationFrame(this._loopRaf);
+    clearTimeout(this._pulseT); clearTimeout(this._swapT);
+    window.removeEventListener('scroll', this._onScroll);
+  }
+  tweenTo(target) {
+    if (this._raf) cancelAnimationFrame(this._raf);
+    const from = this.state.shownPct == null ? target : this.state.shownPct;
+    const reduce = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || from === target) { this.setState({ shownPct: target }); return; }
+    const start = Date.now(), dur = 420;
+    const tick = () => {
+      const k = Math.min(1, (Date.now() - start) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      this.setState({ shownPct: Math.round(from + (target - from) * e) });
+      if (k < 1) this._raf = requestAnimationFrame(tick); else this._raf = null;
+    };
+    this._raf = requestAnimationFrame(tick);
+  }
+  renderVals() {
+    const st = this.state;
+    const stepsData = [
+      { title: 'Discover', who: 'You', desc: 'You set your starting preferences: how you brew and three flavour sliders. Roastline recommends a first coffee.' },
+      { title: 'Taste', who: 'Roastline', desc: 'Your match is roasted to order by an independent roaster and arrives within days, with a short brew card.' },
+      { title: 'Rate', who: 'You', desc: 'Loved it, fine or not for me. One tap in the app tells us what worked.' },
+      { title: 'Learn', who: 'Roastline', desc: 'Your rating adjusts your taste profile, so it gets more accurate with every bag.' },
+      { title: 'Repeat', who: 'Together', desc: 'The next recommendation starts from a sharper profile, so it lands closer to what you love.' }
+    ];
+    const accs = [['Starting point', '25%'], ['First match', '40%'], ['Feedback in', '58%'], ['Profile updated', '78%'], ['Sharper each cycle', '92%']];
+    const steps = stepsData.map((s, i) => {
+      const on = i === st.step;
+      return {
+        num: '0' + (i + 1), title: s.title, pressed: on ? 'true' : 'false',
+        arrow: i < stepsData.length - 1 ? '→' : '↻',
+        bg: on ? '#F6F2EC' : 'transparent', fg: on ? '#22180F' : '#F6F2EC', border: on ? '#F6F2EC' : '#5A4A3B',
+        pick: () => { if (this._loopRaf) { cancelAnimationFrame(this._loopRaf); this._loopRaf = null; } this.setState({ step: i, loopP: (i + 1) / 5 }); }
+      };
+    });
+    const hintFor = {
+      fruity: (v) => v < 35 ? 'Bright, fruity, juicy' : v > 65 ? 'Chocolatey and round' : 'Balanced fruit and cocoa',
+      roast: (v) => v < 35 ? 'Light roast, more nuance' : v > 65 ? 'Darker, bolder, smoother' : 'Medium roast',
+      floral: (v) => v < 35 ? 'Floral, tea-like' : v > 65 ? 'Nutty, caramel-like' : 'Somewhere in between'
+    };
+    const mk = (key, left, right) => ({
+      left, right, label: left + ' to ' + right, value: st[key], pos: 'calc(' + st[key] + '% - 7px)',
+      hint: hintFor[key](st[key]), hintColor: st.pulse ? '#8A4F26' : '#5E5145',
+      set: (e) => this.setState({ [key]: Number(e.target.value) })
+    });
+    const dims = [mk('fruity', 'Fruity', 'Chocolate'), mk('roast', 'Light', 'Dark'), mk('floral', 'Floral', 'Nutty')];
+    const m = this.computeMatch();
+    const shown = st.shownPct == null ? m.pct : st.shownPct;
+
+    const roasterData = [['NORTHLINE', 'London'], ['FIELD NOTE', 'Amsterdam'], ['EMBER & CO.', 'Barcelona'], ['KINDRED', 'Copenhagen'], ['ORIGIN HOUSE', 'Berlin'], ['WILDFIELD', 'Lisbon']];
+    const roasters = roasterData.concat(roasterData).map((r, i) => ({ name: r[0], city: r[1], hidden: i >= roasterData.length ? 'true' : 'false' }));
+
+    const quotes = [
+      { text: 'The first bag was already close. The second one felt like Roastline had actually understood what I like.', name: 'Alexander K.', meta: 'V60 · Fruity / Light' },
+      { text: 'I usually struggle to choose coffee online. This made the process surprisingly easy.', name: 'Elena M.', meta: 'Drip · Floral / Light' },
+      { text: 'The recommendations became noticeably better after I rated my first coffees.', name: 'Mark R.', meta: 'Aeropress · Balanced / Medium' }
+    ];
+
+    const freqData = [{ w: 2, label: 'Every 2 weeks' }, { w: 4, label: 'Every 4 weeks', popular: true }, { w: 6, label: 'Every 6 weeks' }];
+    const freqs = freqData.map((f) => {
+      const on = st.freq === f.w;
+      return { label: f.label, popular: !!f.popular, checked: on ? 'true' : 'false', bg: on ? '#FFFFFF' : 'transparent', border: on ? '#DCCFBF' : 'transparent', shadow: on ? '0 2px 8px rgba(34,24,15,0.08)' : 'none', pick: () => this.setState({ freq: f.w }) };
+    });
+    const planData = [
+      { name: 'Starter', price: '€18', was: '€19', qty: '1 × 250 g', desc: 'One specialty coffee matched to your taste.', items: ['Personalized match', 'Whole bean or ground', 'Taste profile', 'Skip or pause anytime'] },
+      { name: 'Explorer', price: '€36', was: '€38', qty: '2 × 250 g', desc: 'Two different coffees from independent roasters.', items: ['Personalized recommendations', 'Two different origins', 'Taste & rate every delivery', 'Skip, swap or pause anytime'], featured: true },
+      { name: 'Connoisseur', price: '€40', was: '€42', qty: '2 × 250 g', desc: 'Rare lots and exceptional coffees selected around your profile.', items: ['Limited micro-lots', 'Premium origins', 'Roaster tasting notes', 'Early access to new coffees', 'Skip, swap or pause anytime'] }
+    ];
+    const plans = planData.map((p) => {
+      const f = !!p.featured;
+      return {
+        name: p.name, price: p.price, was: p.was, badgeBg: f ? '#3A2E24' : '#F3E6C9', badgeFg: f ? '#D9A877' : '#8A4F26', qty: p.qty, desc: p.desc, featured: f,
+        items: p.items.map((t) => ({ t })),
+        bg: f ? '#22180F' : '#FFFFFF', fg: f ? '#F6F2EC' : '#22180F', border: f ? '#22180F' : '#E2D7C9',
+        muted: f ? '#D6C9BA' : '#5E5145', body: f ? '#D6C9BA' : '#4A3F35', check: f ? '#D9A877' : '#8A4F26',
+        shadow: f ? '0 30px 60px -30px rgba(34,24,15,0.5)' : 'none',
+        ctaBg: f ? '#F6F2EC' : 'transparent', ctaFg: '#22180F', ctaBorder: f ? '#F6F2EC' : '#22180F'
+      };
+    });
+
+    const fmt = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const now = new Date(); now.setHours(12, 0, 0, 0);
+    const toTue = (2 - now.getDay() + 7) % 7 || 7;
+    const roastD = new Date(now); roastD.setDate(now.getDate() + toTue);
+    const shipD = new Date(roastD); shipD.setDate(roastD.getDate() + 2);
+    const skipD = new Date(shipD); skipD.setDate(shipD.getDate() + 28);
+    const rateLabels = { loved: 'Loved it', fine: 'Fine', no: 'Not for me' };
+    const dash = {
+      next: st.skipped ? fmt(skipD) : fmt(shipD),
+      charge: (() => { const d = new Date(st.skipped ? skipD : shipD); d.setDate(d.getDate() - 2); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); })(),
+      status: st.skipped ? fmt(shipD) + ' delivery skipped' : (st.swapped ? 'Next bag swapped' : 'Roasting starts ' + fmt(roastD)),
+      coffee: st.swapped ? 'Kenya Nyeri' : 'Ethiopia Guji', short: st.swapped ? 'Nyeri' : 'Guji',
+      notes: st.swapped ? 'Blackcurrant · Grapefruit · Brown sugar' : 'Blueberry · Jasmine · Citrus',
+      rateOpen: st.rateOpen,
+      rateLabel: st.rated ? 'Rated: ' + rateLabels[st.rated] + ' ✓' : (st.rateOpen ? 'Cancel' : 'Rate this coffee'),
+      swapLabel: st.swapped ? 'Undo swap' : 'Swap coffee',
+      skipLabel: st.skipped ? 'Undo skip' : 'Skip delivery',
+      profileNote: st.rated ? 'Profile updated from your rating just now' : 'Updated after your last rating',
+      toggleRate: () => this.setState(st.rated ? { rated: null, rateOpen: true } : { rateOpen: !st.rateOpen }),
+      toggleSwap: () => this.setState({ swapped: !st.swapped }),
+      toggleSkip: () => this.setState({ skipped: !st.skipped }),
+      rateOpts: ['loved', 'fine', 'no'].map((k) => ({ label: rateLabels[k], pick: () => this.setState({ rated: k, rateOpen: false }) }))
+    };
+
+    const faqData = [
+      { q: 'How does Roastline know which coffee I’ll like?', a: 'You start with how you brew and three flavour sliders. After each delivery you rate the coffee in one tap, and your taste profile shifts toward what you enjoy. Every new match is chosen from our roaster network against that profile.' },
+      { q: 'Whole bean or ground?', a: 'Both. Choose whole bean, or tell us your brewer and we grind for it: espresso, moka pot, filter, Aeropress or French press. You can change it before any delivery.' },
+      { q: 'What if I don’t like my coffee?', a: 'Rate it “not for me” and tell us why if you like. Your next match moves away from it. That feedback is exactly how Roastline gets smarter.' },
+      { q: 'Can I change delivery frequency, skip, pause or cancel?', a: 'Yes, anytime from your dashboard. Switch between every 2, 4 or 6 weeks, skip a single delivery, pause, or cancel without contacting support.' },
+      { q: 'How fresh is the coffee?', a: 'Every bag is roasted to order and ships within 48 hours of roasting. The roast date is printed on the bag and shown in the app.' }
+    ];
+    const faq = faqData.map((f, i) => {
+      const open = st.faqOpen === i;
+      return { q: f.q, a: f.a, open, expanded: open ? 'true' : 'false', rot: open ? 'rotate(45deg)' : 'rotate(0deg)', toggle: () => this.setState({ faqOpen: open ? -1 : i }) };
+    });
+
+    return {
+      playLoop: () => this.playLoop(),
+      loopW: (Math.max(0.02, st.loopP) * 100).toFixed(2) + '%',
+      lineExp: st.seen.experience ? '1' : '0', lineProfile: st.seen.profile ? '1' : '0', lineOrigin: st.seen.origin ? '1' : '0',
+      matchOp: st.matchOp,
+      journey: [
+        { title: 'Farm', head: 'Smallholder farms in the Guji zone', text: 'Families grow coffee alongside shade trees in southern Ethiopia and pick only ripe cherries.', src: 'farm.jpg', alt: 'Coffee cherries on a hillside farm', pos: '50% 70%' },
+        { title: 'Altitude', head: 'Grown high, ripened slowly', text: 'Cool nights at around 1,800 to 2,300 m slow the cherry down and build sweetness.', src: 'altitude.jpg', alt: 'Misty highland coffee terraces', pos: '50% 50%' },
+        { title: 'Bean', head: 'Washed and hand-sorted', text: 'Washed processing gives the clean, floral cup this coffee is known for.', src: 'bean.jpg', alt: 'Hand sorting green coffee beans', pos: '38% 50%' },
+        { title: 'Roast', head: 'Light roast, roasted to order', text: 'Roasted light to keep the fruit and jasmine, then shipped within 48h.', src: 'roast.jpg', alt: 'Freshly roasted beans pouring from the roaster', pos: '50% 50%' },
+        { title: 'Cup', head: 'Blueberry, jasmine, citrus', text: 'Floral first, then blueberry sweetness as it cools. Your morning, traced back to the farm.', src: 'cup.jpg', alt: 'A cup of filter coffee on linen with blueberries', pos: '50% 50%' }
+      ].map((j, i) => {
+        const on = i === st.jActive, past = i < st.jActive;
+        return Object.assign(j, { id: 'journey-' + i, num: '0' + (i + 1), op: on ? '1' : '0', hidden: on ? 'false' : 'true',
+          dotBg: on || past ? '#8A4F26' : '#F6F2EC', dotBorder: on || past ? '#8A4F26' : '#C9BBA9',
+          numColor: on ? '#8A4F26' : '#6B5D50', headColor: on ? '#22180F' : '#8C7E70', bodyColor: on ? '#4A3F35' : '#8C7E70' });
+      }),
+      jFill: (st.jActive / 4 * 100) + '%',
+      steps, activeDesc: stepsData[st.step].desc, activeWho: stepsData[st.step].who,
+      accLabel: accs[st.step][0], accW: accs[st.step][1],
+      dims, roasters, freqs,
+      quote: quotes[st.qi], quoteIdx: '0' + (st.qi + 1) + ' / 0' + quotes.length,
+      quotePrev: () => this.setState({ qi: (st.qi + quotes.length - 1) % quotes.length }),
+      quoteNext: () => this.setState({ qi: (st.qi + 1) % quotes.length }), freqWeeks: st.freq, plans, dash, faq,
+      shownPct: shown, matchBar: shown + '%', ring: st.pulse ? '6px' : '0px',
+      match: (() => { const b = st.shownMatch || m.best; return { name: b.name, short: b.short, notes: b.notes, meta: b.meta, isGuji: b.name === 'Ethiopia Guji' }; })()
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>

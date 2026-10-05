@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste quiz · Roastline</title>
+<meta name="description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:title" content="Taste quiz · Roastline">
+<meta property="og:description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:image" content="hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F2EC;overflow-x:hidden}
+a{color:#22180F}a:hover{color:#8A4F26}
+.rl-btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease,border-color .25s ease}
+.rl-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -12px rgba(34,24,15,.4)}
+.rl-btn .rl-arr{display:inline-block;transition:transform .25s ease}
+.rl-btn:hover .rl-arr{transform:translateX(4px)}
+.rl-in{animation:rl-in .45s ease both}
+@keyframes rl-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.rl-in{animation:none}.rl-btn{transition:none}}
+</style>
+<script src="morphdom.min.js"></script>
+<script src="runtime.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div style="background: #F6F2EC; color: #22180F; font-family: 'Instrument Sans', sans-serif; font-size: 17px; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column">
+
+<header style="width: 100%; max-width: 1280px; margin: 0 auto; padding: 24px 32px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 16px">
+<a href="index.html" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 22px; text-decoration: none; color: #22180F">Roastline</a>
+<nav style="display: flex; gap: 24px; font-size: 15px"><a href="guji.html" style="text-decoration: none">This month's coffee</a><a href="index.html" style="text-decoration: none; color: #4A3F35">Exit quiz</a></nav>
+</header>
+
+<div style="width: 100%; max-width: 760px; margin: 0 auto; padding: 0 32px; box-sizing: border-box">
+<sc-if value="{{showProgress}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-top: 8px">
+<div style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A4F26"><span>Taste quiz</span><span>{{progressLabel}}</span></div>
+<div style="height: 4px; border-radius: 999px; background: #E2D7C9"><div style="height: 4px; border-radius: 999px; background: #8A4F26; width: {{progressW}}; transition: width .4s ease"></div></div>
+</div>
+</sc-if>
+</div>
+
+<main style="flex: 1 1 auto; width: 100%; max-width: 760px; margin: 0 auto; padding: 56px 32px 64px; box-sizing: border-box">
+
+<!-- STEP 1: BREW -->
+<sc-if value="{{is0}}" hint-placeholder-val="{{ true }}">
+<div class="rl-in" style="display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em">How do you usually brew?</h1>
+<p style="margin: 0; color: #4A3F35">We grind for your brewer, so every bag works the moment it arrives.</p>
+</div>
+<div role="radiogroup" aria-label="Brew method" style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{brews}}" as="b" hint-placeholder-count="5">
+<button role="radio" aria-checked="{{b.checked}}" onClick="{{b.pick}}" class="rl-btn" style="font: inherit; cursor: pointer; text-align: left; padding: 20px 24px; border-radius: 18px; border: 1.5px solid {{b.border}}; background: {{b.bg}}; color: #22180F; display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 20px">{{b.title}}</span><span style="font-size: 14px; color: #5E5145">{{b.sub}}</span></span>
+<span style="flex: 0 0 auto; width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid {{b.border}}; display: flex; align-items: center; justify-content: center"><span style="width: 10px; height: 10px; border-radius: 999px; background: {{b.dot}}"></span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- STEP 2: FLAVOUR -->
+<sc-if value="{{is1}}" hint-placeholder-val="{{ false }}">
+<div class="rl-in" style="display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em">What do you enjoy in a cup?</h1>
+<p style="margin: 0; color: #4A3F35">No wrong answers. Go with your gut, your ratings will fine-tune it later.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E2D7C9; border-radius: 24px; padding: clamp(24px, 4vw, 40px); display: flex; flex-direction: column; gap: 32px">
+<sc-for list="{{dims}}" as="d" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px"><span>{{d.left}}</span><span>{{d.right}}</span></div>
+<input type="range" min="0" max="100" step="1" value="{{d.value}}" onChange="{{d.set}}" aria-label="{{d.label}}" style="width: 100%; height: 28px; accent-color: #8A4F26; cursor: pointer; margin: 0">
+<div style="font-size: 14px; color: #5E5145">{{d.hint}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; font-size: 15px; color: #4A3F35">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8A4F26">Leaning toward</span>
+<span style="font-weight: 600; color: #22180F">{{match.name}}</span>
+</div>
+</div>
+</sc-if>
+
+<!-- STEP 3: AMOUNT -->
+<sc-if value="{{is2}}" hint-placeholder-val="{{ false }}">
+<div class="rl-in" style="display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 12px">
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em">How much coffee do you drink?</h1>
+<p style="margin: 0; color: #4A3F35">So beans arrive before you run out, not after they go stale.</p>
+</div>
+<div role="radiogroup" aria-label="How much coffee" style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{amounts}}" as="a" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{a.checked}}" onClick="{{a.pick}}" class="rl-btn" style="font: inherit; cursor: pointer; text-align: left; padding: 20px 24px; border-radius: 18px; border: 1.5px solid {{a.border}}; background: {{a.bg}}; color: #22180F; display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 20px">{{a.title}}</span><span style="font-size: 14px; color: #5E5145">{{a.sub}}</span></span>
+<span style="flex: 0 0 auto; width: 22px; height: 22px; border-radius: 999px; border: 1.5px solid {{a.border}}; display: flex; align-items: center; justify-content: center"><span style="width: 10px; height: 10px; border-radius: 999px; background: {{a.dot}}"></span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- STEP 4: RESULT -->
+<sc-if value="{{is3}}" hint-placeholder-val="{{ false }}">
+<div class="rl-in" style="display: flex; flex-direction: column; gap: 28px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Your first match</div>
+<div style="background: #22180F; color: #F6F2EC; border-radius: 28px; padding: clamp(28px, 4vw, 44px); display: flex; flex-wrap: wrap; gap: 28px; align-items: center; box-shadow: 0 40px 80px -40px rgba(34,24,15,0.6)">
+<div style="flex: 0 0 auto; width: 104px; height: 136px; border-radius: 10px 10px 16px 16px; background: #C9A882; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 14px 0 #B8956E, 0 24px 40px -20px rgba(0,0,0,0.7)">
+<div style="width: 74px; background: #FBF8F4; color: #22180F; border-radius: 5px; padding: 10px 4px; text-align: center; font-family: 'Hanken Grotesk', sans-serif; font-size: 12px; font-weight: 600; line-height: 1.25">Roastline<br><span style="font-weight: 400; color: #5E5145">{{match.short}}</span></div>
+</div>
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 64px; letter-spacing: -0.05em; line-height: 0.9">{{match.pct}}%</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #CDBFAF">MATCH</span></div>
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 30px; letter-spacing: -0.02em; line-height: 1.1">{{match.name}}</div>
+<div style="color: #CDBFAF">{{match.notes}}</div>
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #A8988A">{{match.meta}} · {{grind}}</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 0">
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px; padding-bottom: 8px">Why this coffee</div>
+<sc-for list="{{reasons}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; gap: 12px; align-items: baseline; padding: 12px 0; border-top: 1px solid #E2D7C9; color: #4A3F35"><span style="color: #8A4F26" aria-hidden="true">✓</span><span>{{r.text}}</span></div>
+</sc-for>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E2D7C9; border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px">
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px">Recommended plan</div>
+<div style="font-size: 14px; color: #5E5145">Based on how much you drink</div>
+</div>
+<div role="radiogroup" aria-label="Plan" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px">
+<sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{p.checked}}" onClick="{{p.pick}}" style="font: inherit; cursor: pointer; text-align: left; padding: 16px; border-radius: 14px; border: 1.5px solid {{p.border}}; background: {{p.bg}}; color: #22180F; display: flex; flex-direction: column; gap: 2px; transition: border-color .2s ease, background-color .2s ease">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 17px">{{p.title}}</span>
+<span style="font-size: 13px; color: #5E5145">{{p.sub}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; margin-top: 6px">{{p.price}} / delivery</span>
+</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #EFE6DA; padding-top: 16px">
+<div style="font-weight: 600; font-size: 15px">Delivery frequency</div>
+<div role="radiogroup" aria-label="Delivery frequency" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{freqs}}" as="f" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{f.checked}}" onClick="{{f.pick}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{f.border}}; background: {{f.bg}}; color: #22180F; display: flex; gap: 8px; align-items: center; transition: border-color .2s ease, background-color .2s ease">{{f.label}}<sc-if value="{{f.popular}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: #8A4F26">Most popular</span></sc-if></button>
+</sc-for>
+</div>
+<div style="font-size: 14px; color: #5E5145">Choose your pace. Change, skip or pause anytime.</div>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<button onClick="{{confirm}}" class="rl-btn" style="font: inherit; cursor: pointer; border: 0; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 17px 32px; border-radius: 999px">Add to my subscription <span class="rl-arr">→</span></button>
+<sc-if value="{{match.isGuji}}" hint-placeholder-val="{{ true }}"><a href="guji.html" class="rl-btn" style="text-decoration: none; font-weight: 500; padding: 16px 26px; border-radius: 999px; border: 1px solid #22180F">See Ethiopia Guji <span class="rl-arr">→</span></a></sc-if>
+<sc-if value="{{notGuji}}" hint-placeholder-val="{{ false }}"><a href="guji.html" style="font-weight: 500; padding: 17px 12px">Or see this month's coffee</a></sc-if>
+<button onClick="{{restart}}" style="font: inherit; cursor: pointer; background: none; border: 0; color: #4A3F35; text-decoration: underline; padding: 17px 8px">Retake quiz</button>
+</div>
+</div>
+</sc-if>
+
+<!-- STEP 5: CONFIRMED -->
+<sc-if value="{{is4}}" hint-placeholder-val="{{ false }}">
+<div class="rl-in" style="display: flex; flex-direction: column; gap: 28px; align-items: flex-start; padding-top: 24px">
+<div style="width: 56px; height: 56px; border-radius: 999px; background: #E0E8D9; display: flex; align-items: center; justify-content: center; font-size: 26px; color: #2F5D3A" aria-hidden="true">✓</div>
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4.5vw, 56px); line-height: 1.05; letter-spacing: -0.03em">You're in. Your first bag is being picked.</h1>
+<div style="width: 100%; display: flex; flex-direction: column; border-top: 1px solid #E2D7C9">
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E2D7C9"><span style="color: #5E5145">Coffee</span><span style="font-weight: 500">{{match.name}}</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E2D7C9"><span style="color: #5E5145">Grind</span><span style="font-weight: 500">{{grind}}</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E2D7C9"><span style="color: #5E5145">Plan</span><span style="font-weight: 500">{{planName}}</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E2D7C9"><span style="color: #5E5145">Frequency</span><span style="font-weight: 500">{{freqName}}</span></div>
+<div style="display: flex; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E2D7C9"><span style="color: #5E5145">Ships</span><span style="font-weight: 500">Within 48h of roasting</span></div>
+</div>
+<p style="margin: 0; color: #4A3F35; max-width: 560px">When it arrives, rate it in one tap. Didn't love it? Tell us. Your next match gets smarter.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<a href="checkout.html" class="rl-btn" style="text-decoration: none; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 16px 28px; border-radius: 999px">Continue to checkout <span class="rl-arr">→</span></a>
+<a href="guji.html" style="font-weight: 500; padding: 16px 8px">See the coffee first</a>
+</div>
+</div>
+</sc-if>
+
+</main>
+
+<sc-if value="{{showNav}}" hint-placeholder-val="{{ true }}">
+<div style="border-top: 1px solid #E2D7C9; background: #FBF8F4">
+<div style="max-width: 760px; margin: 0 auto; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<button onClick="{{back}}" style="font: inherit; cursor: pointer; background: none; border: 0; color: {{backColor}}; padding: 14px 4px">← Back</button>
+<button onClick="{{next}}" aria-disabled="{{nextDisabled}}" class="rl-btn" style="font: inherit; cursor: {{nextCursor}}; border: 0; background: {{nextBg}}; color: #FFFFFF; font-weight: 500; padding: 15px 30px; border-radius: 999px">{{nextLabel}} <span class="rl-arr">→</span></button>
+</div>
+</div>
+</sc-if>
+
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 0, brew: null, amount: null, plan: null, freq: 4, fruity: 30, roast: 25, floral: 30 };
+  }
+  renderVals() {
+    const st = this.state;
+    const sel = (on) => ({ border: on ? '#8A4F26' : '#DCCFBF', bg: on ? '#FBF3EA' : '#FFFFFF', dot: on ? '#8A4F26' : 'transparent', checked: on ? 'true' : 'false' });
+    const brewData = [
+      { id: 'filter', title: 'Filter', sub: 'Pour-over, V60, Chemex, drip machine', grind: 'Medium-fine grind', label: 'filter' },
+      { id: 'espresso', title: 'Espresso', sub: 'Machine at home or a manual lever', grind: 'Fine espresso grind', label: 'espresso' },
+      { id: 'moka', title: 'Moka pot', sub: 'Stovetop, strong and rich', grind: 'Fine-medium grind', label: 'moka pot' },
+      { id: 'press', title: 'French press', sub: 'Full-bodied immersion', grind: 'Coarse grind', label: 'French press' },
+      { id: 'whole', title: 'I grind my own', sub: 'Send whole beans', grind: 'Whole bean', label: 'own grinder' }
+    ];
+    const brews = brewData.map((b) => Object.assign({ title: b.title, sub: b.sub, pick: () => this.setState({ brew: b.id }) }, sel(st.brew === b.id)));
+    const brewSel = brewData.find((b) => b.id === st.brew) || brewData[0];
+    const hints = {
+      fruity: st.fruity < 40 ? 'Bright, fruity, juicy' : st.fruity > 60 ? 'Chocolatey, round, comforting' : 'A balance of both',
+      roast: st.roast < 40 ? 'Light roast, more nuance' : st.roast > 60 ? 'Darker roast, bolder and smoother' : 'Medium roast',
+      floral: st.floral < 40 ? 'Floral and tea-like' : st.floral > 60 ? 'Nutty and caramel-like' : 'Somewhere in between'
+    };
+    const mk = (key, left, right) => ({ left, right, label: left + ' to ' + right, value: st[key], hint: hints[key], set: (e) => this.setState({ [key]: Number(e.target.value) }) });
+    const dims = [mk('fruity', 'Fruity', 'Chocolate'), mk('roast', 'Light', 'Dark'), mk('floral', 'Floral', 'Nutty')];
+    const amountData = [
+      { id: 'few', title: 'A few cups a week', sub: 'One bag per delivery is plenty', plan: 'starter' },
+      { id: 'daily', title: 'A cup or two every day', sub: 'Two bags per delivery', plan: 'explorer' },
+      { id: 'rare', title: 'Daily, and I love rare coffees', sub: 'Micro-lots and limited releases', plan: 'connoisseur' }
+    ];
+    const amounts = amountData.map((a) => Object.assign({ title: a.title, sub: a.sub, pick: () => this.setState({ amount: a.id, plan: a.plan }) }, sel(st.amount === a.id)));
+    const planData = [
+      { id: 'starter', title: 'Starter', sub: '1 × 250 g', price: '€18' },
+      { id: 'explorer', title: 'Explorer', sub: '2 × 250 g, two origins', price: '€36' },
+      { id: 'connoisseur', title: 'Connoisseur', sub: '2 × 250 g, rare lots', price: '€40' }
+    ];
+    const plans = planData.map((p) => Object.assign({ title: p.title, sub: p.sub, price: p.price, pick: () => this.setState({ plan: p.id }) }, sel(st.plan === p.id)));
+    const planSel = planData.find((p) => p.id === st.plan) || planData[1];
+    const planName = planSel.title + ' · ' + planSel.price + ' / delivery';
+    const freqData = [{ w: 2, label: 'Every 2 weeks' }, { w: 4, label: 'Every 4 weeks', popular: true }, { w: 6, label: 'Every 6 weeks' }];
+    const freqs = freqData.map((f) => Object.assign({ label: f.label, popular: !!f.popular, pick: () => this.setState({ freq: f.w }) }, sel(st.freq === f.w)));
+    const freqName = 'Every ' + st.freq + ' weeks';
+    const coffees = [
+      { name: 'Ethiopia Guji', short: 'Guji', notes: 'Blueberry · Jasmine · Citrus', meta: 'Washed · Light roast', f: 25, r: 25, n: 25 },
+      { name: 'Kenya Nyeri', short: 'Nyeri', notes: 'Blackcurrant · Grapefruit · Brown sugar', meta: 'Washed · Light-medium', f: 15, r: 40, n: 45 },
+      { name: 'Colombia Huila', short: 'Huila', notes: 'Red apple · Caramel · Cocoa', meta: 'Washed · Medium roast', f: 55, r: 50, n: 55 },
+      { name: 'Guatemala Huehuetenango', short: 'Huehue', notes: 'Plum · Dark chocolate · Almond', meta: 'Washed · Medium-dark', f: 70, r: 65, n: 70 },
+      { name: 'Brazil Cerrado', short: 'Cerrado', notes: 'Milk chocolate · Hazelnut · Toffee', meta: 'Natural · Dark roast', f: 88, r: 80, n: 88 }
+    ];
+    let best = coffees[0], bestD = 1e9;
+    coffees.forEach((c) => {
+      const d = Math.sqrt(Math.pow(c.f - st.fruity, 2) + Math.pow(c.r - st.roast, 2) + Math.pow(c.n - st.floral, 2));
+      if (d < bestD) { bestD = d; best = c; }
+    });
+    const pct = Math.max(62, Math.min(99, Math.round(100 - bestD * 0.85)));
+    const reasons = [
+      { text: 'Matches your taste: ' + hints.fruity.toLowerCase() + ', ' + hints.floral.toLowerCase() + '.' },
+      { text: best.meta + ', close to the roast level you picked.' },
+      { text: brewSel.grind + ' for your ' + brewSel.label + ', ready to brew on arrival.' }
+    ];
+    const canNext = st.step === 0 ? !!st.brew : st.step === 2 ? !!st.amount : true;
+    const next = () => { if (!canNext) return; this.setState({ step: Math.min(3, st.step + 1) }); };
+    const back = () => { if (st.step > 0) this.setState({ step: st.step - 1 }); };
+    const labels = ['Step 1 of 3', 'Step 2 of 3', 'Step 3 of 3', 'Your result'];
+    const widths = ['25%', '50%', '75%', '100%'];
+    return {
+      is0: st.step === 0, is1: st.step === 1, is2: st.step === 2, is3: st.step === 3, is4: st.step === 4,
+      showProgress: st.step < 4, showNav: st.step < 3,
+      progressLabel: labels[Math.min(st.step, 3)], progressW: widths[Math.min(st.step, 3)],
+      brews, dims, amounts, plans, planName, freqs, freqName, reasons, grind: brewSel.grind,
+      notGuji: best.name !== 'Ethiopia Guji',
+      match: { pct, name: best.name, short: best.short, notes: best.notes, meta: best.meta, isGuji: best.name === 'Ethiopia Guji' },
+      next, back,
+      nextLabel: st.step === 2 ? 'See my match' : 'Continue',
+      nextBg: canNext ? '#8A4F26' : '#5E5145', nextCursor: canNext ? 'pointer' : 'not-allowed', nextDisabled: canNext ? 'false' : 'true',
+      backColor: st.step > 0 ? '#22180F' : 'transparent',
+      confirm: () => this.setState({ step: 4, plan: st.plan || 'explorer' }),
+      restart: () => this.setState({ step: 0, brew: null, amount: null, plan: null, freq: 4 })
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>

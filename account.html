@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Roastline</title>
+<meta name="description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:title" content="My Roastline">
+<meta property="og:description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:image" content="hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F2EC;overflow-x:hidden}
+a{color:#22180F}a:hover{color:#8A4F26}
+.rl-btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease}
+.rl-btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px -12px rgba(34,24,15,.45)}
+.rl-btn:focus-visible,.rl-ctl:focus-visible{outline:2px solid #8A4F26;outline-offset:3px}
+.rl-ctl{transition:border-color .2s ease,background-color .2s ease}
+.rl-ctl:hover{border-color:#8A4F26}
+.rl-swap{transition:opacity .2s ease}
+@media (prefers-reduced-motion: reduce){.rl-btn,.rl-ctl,.rl-swap{transition:none}}
+</style>
+<script src="morphdom.min.js"></script>
+<script src="runtime.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div style="background: #F6F2EC; color: #22180F; font-family: 'Instrument Sans', sans-serif; font-size: 16px; line-height: 1.55; min-height: 100vh">
+
+<header style="border-bottom: 1px solid #E2D7C9">
+<div style="max-width: 1120px; margin: 0 auto; padding: 22px 32px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+<a href="index.html" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 21px; text-decoration: none">Roastline</a>
+<nav style="display: flex; gap: 28px; font-size: 15px">
+<a href="guji.html" style="text-decoration: none">Our coffee</a>
+<a href="account.html" aria-current="page" style="text-decoration: none; font-weight: 600">My Roastline</a>
+<a href="index.html" style="text-decoration: none; color: #4A3F35">Sign out</a>
+</nav>
+</div>
+</header>
+
+<main style="max-width: 1120px; margin: 0 auto; padding: 56px 32px 112px; display: flex; flex-direction: column; gap: 0">
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 48px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">My Roastline</div>
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.05; letter-spacing: -0.035em">Hi, Alex</h1>
+<p style="margin: 0; color: #4A3F35">{{greeting}}</p>
+</div>
+
+<!-- NEXT DELIVERY -->
+<section aria-labelledby="h-next" style="border-top: 1px solid #E2D7C9; padding: 40px 0; display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: center">
+<div style="flex: 0 0 200px; display: flex; flex-direction: column; gap: 6px">
+<h2 id="h-next" style="margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E5145">Next delivery</h2>
+<div style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 34px; letter-spacing: -0.02em; line-height: 1.1">{{nextDelivery}}</div>
+<div style="font-size: 14px; color: {{statusColor}}">{{status}}</div>
+</div>
+<div class="rl-swap" style="flex: 1 1 320px; min-width: 0; display: flex; gap: 18px; align-items: center; opacity: {{coffeeOp}}">
+<img src="packA.jpg" alt="" style="width: 76px; height: 96px; border-radius: 12px; object-fit: cover; object-position: 50% 62%; background: #E4D8C8; flex: 0 0 auto">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 24px; letter-spacing: -0.02em">{{coffee}}</span>
+<span style="font-size: 15px; color: #4A3F35">{{notes}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145">250 g · Filter · Every {{freq}} weeks</span>
+</div>
+</div>
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-if value="{{rateOpen}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Rate your last coffee, Kenya Nyeri" style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 14px; color: #4A3F35">How was your last coffee, Kenya Nyeri?</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{rateOpts}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" class="rl-ctl" style="font: inherit; font-size: 14px; padding: 11px 4px; border-radius: 12px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{o.label}}</button></sc-for>
+</div>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{toggleRate}}" class="rl-btn" style="font: inherit; font-size: 15px; padding: 13px 0; border-radius: 999px; border: 0; background: #22180F; color: #F6F2EC; font-weight: 500; cursor: pointer">{{rateLabel}}</button>
+<button onClick="{{toggleSwap}}" aria-pressed="{{swapPressed}}" class="rl-ctl" style="font: inherit; font-size: 15px; padding: 13px 0; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{swapLabel}}</button>
+<button onClick="{{toggleSkip}}" aria-pressed="{{skipPressed}}" class="rl-ctl" style="font: inherit; font-size: 15px; padding: 13px 0; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F; cursor: pointer">{{skipLabel}}</button>
+</div>
+</div>
+</section>
+
+<!-- SUBSCRIPTION -->
+<section aria-labelledby="h-sub" style="border-top: 1px solid #E2D7C9; padding: 40px 0; display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-start">
+<h2 id="h-sub" style="flex: 0 0 200px; margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E5145">Your subscription</h2>
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 22px">
+<dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 18px 32px">
+<div><dt style="font-size: 13px; color: #5E5145">Plan</dt><dd style="margin: 0; font-weight: 600">Ethiopia Guji · 250 g</dd></div>
+<div><dt style="font-size: 13px; color: #5E5145">Price</dt><dd style="margin: 0; font-weight: 600">€18 / delivery <span style="font-weight: 400; color: #5E5145">+ €3.90 shipping</span></dd></div>
+<div><dt style="font-size: 13px; color: #5E5145">Frequency</dt><dd style="margin: 0; font-weight: 600">Every {{freq}} weeks</dd></div>
+<div><dt style="font-size: 13px; color: #5E5145">Next charge</dt><dd style="margin: 0; font-weight: 600">{{nextCharge}}</dd></div>
+<div><dt style="font-size: 13px; color: #5E5145">Payment</dt><dd style="margin: 0; font-weight: 600; display: flex; gap: 10px; align-items: baseline"><span style="font-family: 'JetBrains Mono', monospace">•••• 4821</span><a href="#" style="font-weight: 400; font-size: 14px; color: #8A4F26">Change</a></dd></div>
+<div><dt style="font-size: 13px; color: #5E5145">Status</dt><dd style="margin: 0; font-weight: 600; color: {{subStatusColor}}">{{subStatus}}</dd></div>
+</dl>
+
+<sc-if value="{{freqOpen}}" hint-placeholder-val="{{ false }}">
+<div role="radiogroup" aria-label="Delivery frequency" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: #FBF8F4; border-radius: 16px">
+<sc-for list="{{freqs}}" as="o" hint-placeholder-count="3"><button role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" class="rl-ctl" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: #22180F">{{o.label}}</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{cancelOpen}}" hint-placeholder-val="{{ false }}">
+<div role="alertdialog" aria-label="Cancel subscription" style="display: flex; flex-direction: column; gap: 12px; padding: 18px; background: #FBF8F4; border-radius: 16px">
+<span style="font-weight: 600">Cancel your subscription?</span>
+<span style="font-size: 15px; color: #4A3F35">You can also pause for a while and keep your taste profile learning where it left off.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button onClick="{{pauseInstead}}" class="rl-btn" style="font: inherit; font-size: 15px; cursor: pointer; border: 0; background: #22180F; color: #F6F2EC; padding: 12px 20px; border-radius: 999px">Pause instead</button>
+<button onClick="{{confirmCancel}}" class="rl-ctl" style="font: inherit; font-size: 15px; cursor: pointer; border: 1px solid #DCCFBF; background: #FFFFFF; color: #A2412A; padding: 12px 20px; border-radius: 999px">Cancel subscription</button>
+<button onClick="{{keep}}" style="font: inherit; font-size: 15px; cursor: pointer; border: 0; background: none; color: #4A3F35; text-decoration: underline; padding: 12px 8px">Keep it</button>
+</div>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button onClick="{{toggleFreq}}" aria-expanded="{{freqExpanded}}" class="rl-ctl" style="font: inherit; font-size: 15px; cursor: pointer; padding: 12px 20px; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F">Change frequency</button>
+<button onClick="{{togglePause}}" class="rl-ctl" style="font: inherit; font-size: 15px; cursor: pointer; padding: 12px 20px; border-radius: 999px; border: 1px solid #DCCFBF; background: #FFFFFF; color: #22180F">{{pauseLabel}}</button>
+<button onClick="{{openCancel}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 12px 12px; border: 0; background: none; color: #4A3F35; text-decoration: underline">{{cancelLabel}}</button>
+</div>
+</div>
+</section>
+
+<!-- TASTE PROFILE -->
+<section aria-labelledby="h-taste" style="border-top: 1px solid #E2D7C9; padding: 40px 0; display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-start">
+<h2 id="h-taste" style="flex: 0 0 200px; margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E5145">Your taste profile</h2>
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<sc-for list="{{dims}}" as="d" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 14px; color: #4A3F35"><span>{{d.left}}</span><span>{{d.right}}</span></div>
+<div style="position: relative; height: 4px; border-radius: 999px; background: #E9DFD2"><div style="position: absolute; top: -5px; width: 14px; height: 14px; border-radius: 999px; background: #8A4F26; left: {{d.pos}}; transition: left .5s ease"></div></div>
+</div>
+</sc-for>
+</div>
+<div style="flex: 0 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-family: 'JetBrains Mono', monospace; font-size: 40px; font-weight: 500; letter-spacing: -0.05em; line-height: 1">94%</span><span style="font-size: 14px; color: #4A3F35">current match</span></div>
+<div style="font-size: 14px; color: #5E5145">{{profileNote}}</div>
+<a href="quiz.html" class="rl-btn" style="align-self: flex-start; text-decoration: none; font-size: 15px; font-weight: 500; padding: 12px 20px; border-radius: 999px; border: 1px solid #22180F">Update taste profile</a>
+</div>
+</section>
+
+<!-- HISTORY -->
+<section aria-labelledby="h-hist" style="border-top: 1px solid #E2D7C9; padding: 40px 0 0; display: flex; flex-wrap: wrap; gap: 32px 56px; align-items: flex-start">
+<h2 id="h-hist" style="flex: 0 0 200px; margin: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #5E5145">Coffee history</h2>
+<ul style="flex: 1 1 520px; min-width: 0; margin: 0; padding: 0; list-style: none">
+<sc-for list="{{history}}" as="h" hint-placeholder-count="4">
+<li style="display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px solid #EFE6DA">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-weight: 600">{{h.name}}</span><span style="font-size: 13px; color: #5E5145">{{h.meta}}</span></div>
+<span style="flex: 0 0 auto; font-size: 13px; padding: 5px 12px; border-radius: 999px; background: {{h.bg}}; color: #22180F; font-family: {{h.font}}">{{h.tag}}</span>
+</li>
+</sc-for>
+</ul>
+</section>
+
+</main>
+<footer style="border-top: 1px solid #E2D7C9">
+<div style="max-width: 1280px; margin: 0 auto; padding: 48px 32px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 28px 64px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: #22180F">Roastline</span>
+<span style="font-size: 15px; color: #4A3F35">Specialty coffee, matched to your taste.</span>
+<a href="mailto:hello@roastline.coffee" style="font-size: 15px; font-weight: 500; color: #8A4F26">hello@roastline.coffee</a>
+</div>
+<nav aria-label="Footer" style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px">
+<a href="#" style="color: #4A3F35; text-decoration: none">Instagram</a>
+<a href="mailto:hello@roastline.coffee" style="color: #4A3F35; text-decoration: none">Contact</a>
+<a href="index.html#faq" style="color: #4A3F35; text-decoration: none">FAQ</a>
+</nav>
+</div>
+<div style="max-width: 1280px; margin: 0 auto; padding: 18px 32px 32px; border-top: 1px solid #EFE6DA; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 24px">
+<nav aria-label="Legal" style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px">
+<a href="#" style="color: #5E5145; text-decoration: none">Privacy</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Terms</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Subscription policy</a>
+</nav>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6B5D50">Concept brand · Created as a demonstration · 2026</span>
+</div>
+</footer>
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { rateOpen: false, rated: null, swapped: false, skipped: false, freq: 4, freqOpen: false, paused: false, cancelOpen: false, cancelled: false };
+  }
+  renderVals() {
+    const st = this.state;
+    const fmt = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const fmtW = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const now = new Date(); now.setHours(12, 0, 0, 0);
+    const toTue = (2 - now.getDay() + 7) % 7 || 7;
+    const roastD = new Date(now); roastD.setDate(now.getDate() + toTue);
+    const shipD = new Date(roastD); shipD.setDate(roastD.getDate() + 2);
+    const add = (d, n) => { const x = new Date(d); x.setDate(d.getDate() + n); return x; };
+    const ship = st.skipped ? add(shipD, st.freq * 7) : shipD;
+    const charge = add(ship, -2);
+    const inactive = st.paused || st.cancelled;
+    const rateLabels = { loved: 'Loved it', fine: 'Fine', no: 'Not for me' };
+    const rateTag = st.rated ? rateLabels[st.rated] : null;
+    const history = [
+      { name: 'Kenya Nyeri', meta: 'Last delivery · Blackcurrant · Grapefruit', tag: rateTag || 'Rate it', bg: rateTag ? (st.rated === 'no' ? '#F2DCD6' : '#E0E8D9') : '#F3E6C9', font: 'inherit' },
+      { name: 'Ethiopia Guji', meta: 'Current coffee · Blueberry · Jasmine · Citrus', tag: '94% match', bg: '#FFFFFF', font: "'JetBrains Mono', monospace" },
+      { name: 'Colombia Huila', meta: 'Red apple · Caramel', tag: 'Loved it', bg: '#E0E8D9', font: 'inherit' },
+      { name: 'Brazil Cerrado', meta: 'Milk chocolate · Hazelnut', tag: 'Not for me', bg: '#F2DCD6', font: 'inherit' }
+    ];
+    const pos = st.rated === 'loved' ? [24, 22, 24] : st.rated === 'no' ? [36, 30, 34] : [30, 25, 30];
+    const dims = [['Fruity', 'Chocolate'], ['Light', 'Dark'], ['Floral', 'Nutty']].map((d, i) => ({ left: d[0], right: d[1], pos: 'calc(' + pos[i] + '% - 7px)' }));
+    const freqs = [2, 4, 6].map((w) => ({ label: 'Every ' + w + ' weeks', checked: st.freq === w ? 'true' : 'false', border: st.freq === w ? '#8A4F26' : '#DCCFBF', bg: st.freq === w ? '#FBF3EA' : '#FFFFFF', pick: () => this.setState({ freq: w, freqOpen: false }) }));
+    return {
+      greeting: st.cancelled ? 'Your subscription is cancelled. Your taste profile stays here if you come back.' : (st.paused ? 'Your subscription is paused. Resume anytime.' : 'Your coffee is on its way to getting better.'),
+      nextDelivery: st.cancelled ? 'None' : st.paused ? 'On hold' : fmt(ship),
+      status: st.cancelled ? 'Cancelled' : st.paused ? 'Paused' : (st.skipped ? 'Skipped ' + fmt(shipD) + ' · moved' : 'Roasting ' + fmtW(roastD)),
+      statusColor: inactive ? '#A2412A' : '#3F5A43',
+      coffee: st.swapped ? 'Colombia Huila' : 'Ethiopia Guji',
+      notes: st.swapped ? 'Red apple · Caramel · Cocoa' : 'Blueberry · Jasmine · Citrus',
+      coffeeOp: inactive ? '0.45' : '1', freq: st.freq,
+      rateOpen: st.rateOpen,
+      rateLabel: st.rated ? 'Rated ✓' : (st.rateOpen ? 'Cancel' : 'Rate coffee'),
+      toggleRate: () => this.setState(st.rated ? { rated: null, rateOpen: true } : { rateOpen: !st.rateOpen }),
+      rateOpts: ['loved', 'fine', 'no'].map((k) => ({ label: rateLabels[k], pick: () => this.setState({ rated: k, rateOpen: false }) })),
+      swapLabel: st.swapped ? 'Undo swap' : 'Swap', swapPressed: st.swapped ? 'true' : 'false',
+      toggleSwap: () => this.setState({ swapped: !st.swapped }),
+      skipLabel: st.skipped ? 'Undo skip' : 'Skip', skipPressed: st.skipped ? 'true' : 'false',
+      toggleSkip: () => this.setState({ skipped: !st.skipped }),
+      nextCharge: inactive ? 'No upcoming charge' : fmt(charge) + ' · €21.90',
+      subStatus: st.cancelled ? 'Cancelled' : st.paused ? 'Paused' : 'Active', subStatusColor: inactive ? '#A2412A' : '#3F5A43',
+      freqOpen: st.freqOpen, freqExpanded: st.freqOpen ? 'true' : 'false', freqs,
+      toggleFreq: () => this.setState({ freqOpen: !st.freqOpen, cancelOpen: false }),
+      pauseLabel: st.paused ? 'Resume' : 'Pause',
+      togglePause: () => this.setState({ paused: !st.paused, cancelled: false, cancelOpen: false }),
+      cancelOpen: st.cancelOpen, cancelLabel: st.cancelled ? 'Reactivate' : 'Cancel',
+      openCancel: () => this.setState(st.cancelled ? { cancelled: false } : { cancelOpen: true, freqOpen: false }),
+      pauseInstead: () => this.setState({ paused: true, cancelOpen: false }),
+      confirmCancel: () => this.setState({ cancelled: true, paused: false, cancelOpen: false }),
+      keep: () => this.setState({ cancelOpen: false }),
+      dims, history,
+      profileNote: st.rated ? 'Updated from your Kenya Nyeri rating just now' : 'Rate Kenya Nyeri to sharpen your next match'
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>

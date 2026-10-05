@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ethiopia Guji · Roastline</title>
+<meta name="description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:title" content="Ethiopia Guji · Roastline">
+<meta property="og:description" content="Roastline: a specialty coffee subscription that learns your taste. UI/UX case study by Tania Aisen.">
+<meta property="og:image" content="hero.jpg">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&amp;family=Instrument+Sans:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F2EC;overflow-x:hidden}
+a{color:#22180F}a:hover{color:#8A4F26}
+.rl-btn{transition:transform .25s ease,box-shadow .25s ease,background-color .25s ease}
+.rl-btn:hover{transform:translateY(-1px);box-shadow:0 12px 24px -12px rgba(34,24,15,.45)}
+.rl-btn .rl-arr{display:inline-block;transition:transform .25s ease}
+.rl-btn:hover .rl-arr{transform:translateX(5px)}
+.rl-xf{transition:opacity .42s ease}
+.rl-row{transition:padding-left .25s ease}
+.rl-row:hover{padding-left:6px !important}
+.rl-row:focus-visible{outline:2px solid #8A4F26;outline-offset:2px}
+.rl-swap{transition:opacity .18s ease}
+.rl-fade{animation:rl-fade .5s ease both}
+@keyframes rl-fade{from{opacity:.2}to{opacity:1}}
+@media (max-width: 720px){.rl-swap{padding-left:0 !important}.rl-bar{left:0 !important;bottom:0 !important;width:100% !important;border-radius:0 !important;border-left:0 !important;border-right:0 !important;padding:12px 16px !important}.rl-bar-desc{display:none}.rl-bar-name{font-size:15px !important}}
+@media (prefers-reduced-motion: reduce){.rl-fade{animation:none}.rl-btn,.rl-bar,.rl-xf,.rl-swap,.rl-row{transition:none !important}}
+</style>
+<script src="morphdom.min.js"></script>
+<script src="runtime.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<template id="tpl">
+
+<div style="background: #F6F2EC; color: #22180F; font-family: 'Instrument Sans', sans-serif; font-size: 17px; line-height: 1.6">
+
+<header style="max-width: 1280px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<a href="index.html" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 22px; text-decoration: none; color: #22180F">Roastline</a>
+<nav style="display: flex; flex-wrap: wrap; align-items: center; gap: 32px; font-size: 15px">
+<a href="index.html#experience" style="text-decoration: none">Experience</a>
+<a href="index.html#plans" style="text-decoration: none">Plans</a>
+<a href="#" aria-label="{{bagLabel}}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px">Bag<sc-if value="{{hasBag}}" hint-placeholder-val="{{ false }}"><span style="min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: #8A4F26; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; transform: {{bump}}; transition: transform .25s ease">{{bagCount}}</span></sc-if></a>
+<a href="quiz.html" class="rl-btn" style="text-decoration: none; background: #22180F; color: #F6F2EC; padding: 12px 22px; border-radius: 999px; font-weight: 500">Take the taste quiz</a>
+</nav>
+</header>
+
+<div style="max-width: 1280px; margin: 0 auto; padding: 0 32px; font-size: 14px; color: #5E5145"><a href="index.html" style="color: #5E5145">Roastline</a> / Our coffee / <span style="color: #22180F">Ethiopia Guji</span></div>
+
+<!-- PRODUCT -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 32px 32px 112px; display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="position: relative; border-radius: 28px; overflow: hidden; background: #E4D8C8; aspect-ratio: 4 / 5; max-height: 720px">
+<sc-for list="{{galleryAll}}" as="g" hint-placeholder-count="4">
+<img src="{{g.src}}" alt="{{g.alt}}" aria-hidden="{{g.hidden}}" class="rl-xf" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{g.pos}}; opacity: {{g.op}}">
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="4">
+<button onClick="{{t.pick}}" aria-label="{{t.alt}}" aria-pressed="{{t.pressed}}" style="padding: 0; border: 2px solid {{t.border}}; border-radius: 14px; overflow: hidden; cursor: pointer; background: #E4D8C8; transition: border-color .2s ease, opacity .2s ease; opacity: {{t.op}}">
+<img src="{{t.src}}" alt="" style="display: block; width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: {{t.pos}}">
+</button>
+</sc-for>
+</div>
+</div>
+
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 24px; position: sticky; top: 24px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Single origin · Washed · Light roast</div>
+<h1 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(44px, 5vw, 72px); line-height: 1; letter-spacing: -0.04em">Ethiopia Guji</h1>
+<div style="font-size: 20px; color: #4A3F35">Blueberry · Jasmine · Citrus</div>
+</div>
+<p style="margin: 0; color: #4A3F35; max-width: 480px">A bright, tea-like coffee from the highlands of southern Ethiopia. Clean and floral when hot, with blueberry sweetness as it cools.</p>
+
+<div style="display: flex; align-items: center; gap: 16px; padding: 18px; border-radius: 18px; background: #FFFFFF; border: 1px solid #E2D7C9">
+<img src="packA.jpg" alt="" style="flex: 0 0 auto; width: 60px; height: 76px; border-radius: 10px; object-fit: cover; object-position: 50% 62%; background: #E4D8C8">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="font-weight: 600">94% match with your taste profile</div>
+<div style="font-size: 14px; color: #5E5145">Example profile. <a href="quiz.html" style="color: #8A4F26">Take the quiz</a> to see your own.</div>
+</div>
+</div>
+
+<div role="group" aria-label="Configure your coffee" style="display: flex; flex-direction: column; border-top: 1px solid #E2D7C9">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 0; border-bottom: 1px solid #E2D7C9">
+<div style="flex: 0 0 104px; font-weight: 600; font-size: 15px">Purchase</div>
+<div role="radiogroup" aria-label="Purchase type" style="flex: 1 1 280px; display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{purchases}}" as="o" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: #22180F; display: inline-flex; align-items: baseline; gap: 8px; transition: border-color .2s ease, background-color .2s ease">{{o.title}}<sc-if value="{{o.hasSub}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{o.subColor}}">{{o.sub}}</span></sc-if><sc-if value="{{o.hasWas}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B5D50; text-decoration: line-through">{{o.was}}</span></sc-if></button>
+</sc-for>
+</div>
+<div style="flex: 1 1 100%; padding-left: 120px; margin-top: -2px; font-size: 13px; color: {{benefitColor}}" class="rl-swap">{{benefit}}</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 0; border-bottom: 1px solid #E2D7C9">
+<div style="flex: 0 0 104px; font-weight: 600; font-size: 15px">Bag size</div>
+<div role="radiogroup" aria-label="Bag size" style="flex: 1 1 280px; display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{sizes}}" as="o" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: #22180F; display: inline-flex; align-items: baseline; gap: 8px; transition: border-color .2s ease, background-color .2s ease">{{o.title}}<sc-if value="{{o.hasSub}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{o.subColor}}">{{o.sub}}</span></sc-if><sc-if value="{{o.hasWas}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B5D50; text-decoration: line-through">{{o.was}}</span></sc-if></button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 0; border-bottom: 1px solid #E2D7C9">
+<div style="flex: 0 0 104px; font-weight: 600; font-size: 15px">Grind</div>
+<div role="radiogroup" aria-label="Grind" style="flex: 1 1 280px; display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{grinds}}" as="o" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: #22180F; display: inline-flex; align-items: baseline; gap: 8px; transition: border-color .2s ease, background-color .2s ease">{{o.title}}<sc-if value="{{o.hasSub}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{o.subColor}}">{{o.sub}}</span></sc-if><sc-if value="{{o.hasWas}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B5D50; text-decoration: line-through">{{o.was}}</span></sc-if></button>
+</sc-for>
+</div>
+<div class="rl-swap" style="flex: 1 1 100%; padding-left: 120px; margin-top: -2px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145; opacity: {{hintOp}}">{{grindHint}}</div>
+</div>
+<sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 0; border-bottom: 1px solid #E2D7C9">
+<div style="flex: 0 0 104px; font-weight: 600; font-size: 15px">Delivery</div>
+<div role="radiogroup" aria-label="Delivery frequency" style="flex: 1 1 280px; display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{freqs}}" as="o" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="font: inherit; font-size: 15px; cursor: pointer; padding: 10px 16px; border-radius: 999px; border: 1.5px solid {{o.border}}; background: {{o.bg}}; color: #22180F; display: inline-flex; align-items: baseline; gap: 8px; transition: border-color .2s ease, background-color .2s ease">{{o.title}}<sc-if value="{{o.hasSub}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{o.subColor}}">{{o.sub}}</span></sc-if><sc-if value="{{o.hasWas}}" hint-placeholder-val="{{ false }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #6B5D50; text-decoration: line-through">{{o.was}}</span></sc-if></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 16px 0; border-bottom: 1px solid #E2D7C9">
+<div style="flex: 0 0 104px; font-weight: 600; font-size: 15px">Quantity</div>
+<div style="flex: 1 1 280px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<div role="group" aria-label="Quantity" style="display: inline-flex; align-items: center; border: 1.5px solid #DCCFBF; border-radius: 999px; background: #FFFFFF">
+<button onClick="{{dec}}" aria-label="Decrease quantity" aria-disabled="{{decOff}}" style="font: inherit; font-size: 20px; width: 44px; height: 44px; border: 0; background: none; border-radius: 999px; cursor: {{decCur}}; color: {{decColor}}">−</button>
+<span aria-live="polite" style="min-width: 26px; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500">{{qty}}</span>
+<button onClick="{{inc}}" aria-label="Increase quantity" aria-disabled="{{incOff}}" style="font: inherit; font-size: 20px; width: 44px; height: 44px; border: 0; background: none; border-radius: 999px; cursor: {{incCur}}; color: {{incColor}}">+</button>
+</div>
+<span style="font-size: 14px; color: #5E5145">{{qtyNote}}</span>
+</div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<div style="display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 500; font-size: 34px; letter-spacing: -0.02em; line-height: 1.1">{{totalText}}</span><sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}"><span style="font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #6B5D50; text-decoration: line-through">{{wasText}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A4F26; background: #F3E6C9; padding: 3px 8px; border-radius: 999px">Save 5%</span></sc-if></div>
+<span style="font-size: 14px; color: #5E5145">{{summary}}</span>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145">{{unitText}}</span>
+<sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}"><span style="font-size: 14px; color: #22180F; margin-top: 4px">{{termsText}}</span></sc-if>
+</div>
+<sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}"><a id="rl-buy" href="checkout.html" class="rl-btn" style="text-decoration: none; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 17px 30px; border-radius: 999px">Subscribe · {{totalText}}</a></sc-if>
+<sc-if value="{{isOnce}}" hint-placeholder-val="{{ false }}"><button id="rl-buy" onClick="{{add}}" class="rl-btn" style="font: inherit; cursor: pointer; border: 0; background: {{addBg}}; color: #FFFFFF; font-weight: 500; padding: 17px 30px; border-radius: 999px">{{addLabel}}</button></sc-if>
+</div>
+<sc-if value="{{hasBag}}" hint-placeholder-val="{{ false }}"><div role="status" style="font-size: 14px; color: #3F5A43; margin-top: -10px">{{bagStatus}}</div></sc-if>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: #4A3F35; background: #FBF8F4; border-radius: 14px; padding: 14px 16px">
+<span><span style="font-weight: 600; color: #22180F">{{shipLine}}</span></span>
+<span>{{shipText}} · Skip or pause anytime</span>
+</div>
+</div>
+</section>
+
+<!-- TASTE -->
+<section style="border-top: 1px solid #E2D7C9; border-bottom: 1px solid #E2D7C9; background: #FBF8F4">
+<div style="max-width: 1280px; margin: 0 auto; padding: 112px 32px; display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">In the cup</div>
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 52px); line-height: 1.05; letter-spacing: -0.03em">Floral first, then blueberry as it cools.</h2>
+<p style="margin: 0; color: #4A3F35; max-width: 440px">Washed processing keeps the cup clean and transparent, so the jasmine aroma and citrus brightness come through without heaviness.</p>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 22px; justify-content: center">
+<sc-for list="{{profile}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; font-size: 15px"><span style="font-weight: 600">{{p.label}}</span><span style="color: #5E5145">{{p.word}}</span></div>
+<div style="height: 6px; border-radius: 999px; background: #E9DFD2"><div style="height: 6px; border-radius: 999px; background: #8A4F26; width: {{p.w}}"></div></div>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- ORIGIN FACTS + STORY -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 112px 32px; display: flex; flex-wrap: wrap; gap: 64px; align-items: center">
+<div style="flex: 1 1 460px; min-width: 0; border-radius: 28px; overflow: hidden; background: #E4D8C8">
+<img src="altitude.jpg" alt="Misty highland coffee terraces" style="display: block; width: 100%; aspect-ratio: 4 / 5; max-height: 640px; object-fit: cover">
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Origin</div>
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 52px); line-height: 1.05; letter-spacing: -0.03em">Grown slowly, high in the Guji highlands.</h2>
+<p style="margin: 0; color: #4A3F35">Smallholder farmers deliver ripe cherries to a local washing station, where they are pulped, washed and dried on raised beds. Cool nights at altitude slow the cherry down, which builds the sweetness you taste.</p>
+</div>
+<dl style="margin: 0; display: grid; grid-template-columns: minmax(110px, auto) 1fr; border-top: 1px solid #E2D7C9">
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Region</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">Guji zone, Oromia, Ethiopia</dd>
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Altitude</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">Approx. 1,800–2,300 m</dd>
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Variety</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">Ethiopian landrace (heirloom)</dd>
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Process</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">Washed, dried on raised beds</dd>
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Roaster</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">Field Note, Amsterdam · concept partner</dd>
+<dt style="padding: 13px 0; border-bottom: 1px solid #E2D7C9; color: #5E5145">Harvest</dt><dd style="margin: 0; padding: 13px 0; border-bottom: 1px solid #E2D7C9; font-weight: 500">October to January</dd>
+</dl>
+</div>
+</section>
+
+<!-- BREW GUIDE -->
+<section style="background: #22180F; color: #F6F2EC">
+<div style="max-width: 1280px; margin: 0 auto; padding: 112px 32px; display: flex; flex-wrap: wrap; gap: 64px">
+<div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #D9A877">Brew guide · Pour-over</div>
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(34px, 4vw, 52px); line-height: 1.05; letter-spacing: -0.03em">A clean cup in under three minutes.</h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid #4A3B2E">
+<div style="padding: 16px 0; border-bottom: 1px solid #4A3B2E"><div style="font-size: 13px; color: #A8988A">Coffee</div><div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 24px; font-weight: 500">15 g</div></div>
+<div style="padding: 16px 0; border-bottom: 1px solid #4A3B2E"><div style="font-size: 13px; color: #A8988A">Water</div><div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 24px; font-weight: 500">250 g</div></div>
+<div style="padding: 16px 0; border-bottom: 1px solid #4A3B2E"><div style="font-size: 13px; color: #A8988A">Temperature</div><div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 24px; font-weight: 500">93–96 °C</div></div>
+<div style="padding: 16px 0; border-bottom: 1px solid #4A3B2E"><div style="font-size: 13px; color: #A8988A">Total time</div><div style="font-family: 'Hanken Grotesk', sans-serif; font-size: 24px; font-weight: 500">≈ 2:45</div></div>
+</div>
+</div>
+<ol style="flex: 1 1 420px; min-width: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+<li style="display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid #4A3B2E"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D9A877; padding-top: 4px">0:00</span><span><strong style="font-weight: 600">Bloom.</strong> <span style="color: #CDBFAF">Pour 40 g of water to wet all the grounds, then wait 30 seconds.</span></span></li>
+<li style="display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid #4A3B2E"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D9A877; padding-top: 4px">0:30</span><span><strong style="font-weight: 600">First pour.</strong> <span style="color: #CDBFAF">Slow circles up to 150 g.</span></span></li>
+<li style="display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid #4A3B2E"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D9A877; padding-top: 4px">1:15</span><span><strong style="font-weight: 600">Second pour.</strong> <span style="color: #CDBFAF">Continue to 250 g, keeping the bed level.</span></span></li>
+<li style="display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid #4A3B2E; border-bottom: 1px solid #4A3B2E"><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #D9A877; padding-top: 4px">2:45</span><span><strong style="font-weight: 600">Drawdown.</strong> <span style="color: #CDBFAF">Let it drain, swirl the carafe and taste as it cools.</span></span></li>
+</ol>
+</div>
+</section>
+
+<!-- ALSO ROASTING -->
+<section aria-labelledby="h-also" style="max-width: 1280px; margin: 0 auto; padding: 112px 32px 0; display: flex; flex-wrap: wrap; gap: 32px 64px; align-items: flex-start">
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #8A4F26">Also roasting this month</div>
+<h2 id="h-also" style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(28px, 3vw, 40px); line-height: 1.1; letter-spacing: -0.03em">Other coffees, ranked by your taste.</h2>
+<p style="margin: 0; color: #4A3F35; max-width: 360px">Subscribers get the closest match each delivery. Match scores use the example profile.</p>
+</div>
+<ul style="flex: 2 1 560px; min-width: 0; margin: 0; padding: 0; list-style: none; border-top: 1px solid #E2D7C9">
+<sc-for list="{{also}}" as="c" hint-placeholder-count="4">
+<li style="border-bottom: 1px solid #E2D7C9">
+<button onClick="{{c.toggle}}" aria-expanded="{{c.expanded}}" class="rl-row" style="width: 100%; font: inherit; cursor: pointer; background: none; border: 0; color: #22180F; text-align: left; padding: 20px 0; display: flex; align-items: center; gap: 16px 24px; flex-wrap: wrap">
+<span style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 20px; letter-spacing: -0.01em">{{c.name}}</span><span style="font-size: 14px; color: #4A3F35">{{c.notes}}</span></span>
+<span style="flex: 0 1 200px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #5E5145">{{c.meta}}</span>
+<span style="flex: 0 0 auto; font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 500">{{c.match}}<span style="font-size: 12px; font-weight: 400; color: #5E5145"> match</span></span>
+<span aria-hidden="true" style="flex: 0 0 auto; color: #8A4F26; font-size: 20px; display: inline-block; transition: transform .25s ease; transform: {{c.rot}}">+</span>
+</button>
+<sc-if value="{{c.open}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 0 0 22px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between">
+<span style="max-width: 480px; color: #4A3F35">{{c.desc}}</span>
+<a href="quiz.html" style="font-weight: 500; color: #8A4F26; white-space: nowrap">Get it in a future delivery →</a>
+</div>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+</section>
+
+<!-- CLOSING -->
+<section style="max-width: 1280px; margin: 0 auto; padding: 112px 32px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 620px">
+<h2 style="margin: 0; font-family: 'Hanken Grotesk', sans-serif; font-weight: 400; font-size: clamp(30px, 3.4vw, 44px); line-height: 1.1; letter-spacing: -0.03em">Not sure Guji is for you?</h2>
+<p style="margin: 0; color: #4A3F35">Two minutes in the taste quiz and we'll match a coffee to how you actually like it.</p>
+</div>
+<a href="quiz.html" class="rl-btn" style="text-decoration: none; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 17px 32px; border-radius: 999px">Find my match <span class="rl-arr">→</span></a>
+</section>
+
+<div class="rl-bar" aria-hidden="{{barHidden}}" style="position: fixed; left: 0; right: 0; margin: 0 auto; bottom: 16px; z-index: 20; width: min(1120px, calc(100% - 32px)); box-sizing: border-box; transform: translateY({{barY}}); opacity: {{barOp}}; pointer-events: {{barPe}}; transition: transform .35s ease, opacity .35s ease; background: #FFFFFF; border: 1px solid #E2D7C9; border-radius: 999px; padding: 10px 10px 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 16px 40px -20px rgba(34,24,15,0.35)">
+<div style="display: flex; align-items: center; gap: 14px; min-width: 0">
+<span class="rl-bar-name" style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 17px; white-space: nowrap">Ethiopia Guji</span>
+<span class="rl-bar-desc" style="font-size: 14px; color: #5E5145; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{barDesc}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; flex: 0 0 auto">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 500">{{totalText}}</span>
+<sc-if value="{{isSub}}" hint-placeholder-val="{{ true }}"><a href="checkout.html" tabindex="{{barTab}}" class="rl-btn" style="text-decoration: none; background: #8A4F26; color: #FFFFFF; font-weight: 500; padding: 13px 24px; border-radius: 999px; white-space: nowrap">Subscribe</a></sc-if>
+<sc-if value="{{isOnce}}" hint-placeholder-val="{{ false }}"><button onClick="{{add}}" tabindex="{{barTab}}" class="rl-btn" style="font: inherit; cursor: pointer; border: 0; background: {{addBg}}; color: #FFFFFF; font-weight: 500; padding: 13px 24px; border-radius: 999px; white-space: nowrap">{{barCta}}</button></sc-if>
+</div>
+</div>
+
+<footer style="border-top: 1px solid #E2D7C9">
+<div style="max-width: 1280px; margin: 0 auto; padding: 48px 32px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 28px 64px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Hanken Grotesk', sans-serif; font-weight: 600; font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; color: #22180F">Roastline</span>
+<span style="font-size: 15px; color: #4A3F35">Specialty coffee, matched to your taste.</span>
+<a href="mailto:hello@roastline.coffee" style="font-size: 15px; font-weight: 500; color: #8A4F26">hello@roastline.coffee</a>
+</div>
+<nav aria-label="Footer" style="display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px">
+<a href="#" style="color: #4A3F35; text-decoration: none">Instagram</a>
+<a href="mailto:hello@roastline.coffee" style="color: #4A3F35; text-decoration: none">Contact</a>
+<a href="index.html#faq" style="color: #4A3F35; text-decoration: none">FAQ</a>
+</nav>
+</div>
+<div style="max-width: 1280px; margin: 0 auto; padding: 18px 32px 32px; border-top: 1px solid #EFE6DA; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 24px">
+<nav aria-label="Legal" style="display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px">
+<a href="#" style="color: #5E5145; text-decoration: none">Privacy</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Terms</a>
+<a href="#" style="color: #5E5145; text-decoration: none">Subscription policy</a>
+</nav>
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #6B5D50">Concept brand · Created as a demonstration · 2026</span>
+</div>
+</footer>
+
+</div>
+</template>
+<script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { img: 0, format: 'sub', size: '250', grind: 'filter', freq: 4, qty: 1, cart: 0, bump: false, added: false, last: '', bar: false, alsoOpen: -1, grindShown: 'filter', hintOp: 1, shownTotal: null };
+    this._hintT = null; this._priceRaf = null; this._priceTarget = null;
+    this._bumpT = null;
+    this._onScroll = () => {
+      const el = document.getElementById('rl-buy');
+      if (!el) return;
+      const show = el.getBoundingClientRect().bottom < 0;
+      if (show !== this.state.bar) this.setState({ bar: show });
+    };
+  }
+  componentDidMount() { window.addEventListener('scroll', this._onScroll, { passive: true }); this._onScroll(); }
+  componentWillUnmount() { clearTimeout(this._bumpT); clearTimeout(this._hintT); if (this._priceRaf) cancelAnimationFrame(this._priceRaf); window.removeEventListener('scroll', this._onScroll); }
+  totalNow() { const st = this.state; const p = { '250': [18, 19], '500': [33, 35], '1000': [60, 64] }[st.size] || [18, 19]; return (st.format === 'sub' ? p[0] : p[1]) * st.qty; }
+  componentDidUpdate() {
+    const t = this.totalNow();
+    if (this._priceTarget === null) { this._priceTarget = t; return; }
+    if (t === this._priceTarget) return;
+    const from = this.state.shownTotal == null ? this._priceTarget : this.state.shownTotal;
+    this._priceTarget = t;
+    if (this._priceRaf) cancelAnimationFrame(this._priceRaf);
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { this.setState({ shownTotal: t }); return; }
+    const start = Date.now(), dur = 380;
+    const tick = () => {
+      const k = Math.min(1, (Date.now() - start) / dur), e = 1 - Math.pow(1 - k, 3);
+      this.setState({ shownTotal: Math.round(from + (t - from) * e) });
+      if (k < 1) this._priceRaf = requestAnimationFrame(tick); else this._priceRaf = null;
+    };
+    this._priceRaf = requestAnimationFrame(tick);
+  }
+  renderVals() {
+    const st = this.state;
+    const imgs = [
+      { src: 'packA.jpg', alt: 'A 250 g bag of Roastline Ethiopia Guji on a linen tablecloth by a window', pos: '50% 60%' },
+      { src: 'packB.jpg', alt: 'Roastline Ethiopia Guji bag on soft linen in morning light', pos: '58% 50%' },
+      { src: 'packC.jpg', alt: 'Roastline Ethiopia Guji bag from above with roasted beans and blueberries', pos: '40% 50%' },
+      { src: 'cup.jpg', alt: 'A cup of Ethiopia Guji on linen with blueberries', pos: '50% 50%' }
+    ];
+    const thumbs = imgs.map((m, i) => ({ src: m.src, alt: 'Show photo: ' + m.alt, pos: m.pos, border: i === st.img ? '#8A4F26' : 'transparent', op: i === st.img ? '1' : '0.7', pressed: i === st.img ? 'true' : 'false', pick: () => this.setState({ img: i }) }));
+    const isSub = st.format === 'sub';
+    const fmt = (d) => d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const now = new Date(); now.setHours(12, 0, 0, 0);
+    const toTue = (2 - now.getDay() + 7) % 7 || 7;
+    const roastD = new Date(now); roastD.setDate(now.getDate() + toTue);
+    const shipD = new Date(roastD); shipD.setDate(roastD.getDate() + 2);
+    const sel = (on) => ({ border: on ? '#8A4F26' : '#DCCFBF', bg: on ? '#FBF3EA' : '#FFFFFF', checked: on ? 'true' : 'false', subColor: on ? '#8A4F26' : '#5E5145' });
+    const sizeData = [
+      { id: '250', title: '250 g', g: 250, one: 19, sub: 18 },
+      { id: '500', title: '500 g', g: 500, one: 35, sub: 33 },
+      { id: '1000', title: '1 kg', g: 1000, one: 64, sub: 60 }
+    ];
+    const size = sizeData.find((x) => x.id === st.size) || sizeData[0];
+    const each = isSub ? size.sub : size.one;
+    const maxQ = isSub ? 4 : 6;
+    const purchases = [
+      { id: 'sub', title: 'Subscribe', sub: 'save 5%' },
+      { id: 'once', title: 'One-time', sub: '' }
+    ].map((o) => Object.assign({ title: o.title, sub: o.sub, hasSub: !!o.sub, was: '', hasWas: false, pick: () => this.setState({ format: o.id, added: false, qty: Math.min(st.qty, o.id === 'sub' ? 4 : 6) }) }, sel(st.format === o.id)));
+    const sizes = sizeData.map((o) => Object.assign({ title: o.title, sub: '€' + (isSub ? o.sub : o.one), hasSub: true, was: '€' + o.one, hasWas: isSub, pick: () => this.setState({ size: o.id, added: false }) }, sel(st.size === o.id)));
+    const grindData = [{ id: 'whole', title: 'Whole bean', name: 'whole bean' }, { id: 'filter', title: 'Filter', name: 'filter grind' }, { id: 'espresso', title: 'Espresso', name: 'espresso grind' }, { id: 'press', title: 'French press', name: 'French press grind' }];
+    const grinds = grindData.map((o) => Object.assign({ title: o.title, sub: '', hasSub: false, was: '', hasWas: false, pick: () => { this.setState({ grind: o.id, added: false, hintOp: 0 }); clearTimeout(this._hintT); this._hintT = setTimeout(() => this.setState({ grindShown: o.id, hintOp: 1 }), 180); } }, sel(st.grind === o.id)));
+    const grindName = (grindData.find((g) => g.id === st.grind) || grindData[1]).name;
+    const freqs = [2, 4, 6].map((w) => Object.assign({ title: 'Every ' + w + ' weeks', sub: w === 4 ? 'popular' : '', hasSub: w === 4, was: '', hasWas: false, pick: () => this.setState({ freq: w, added: false }) }, sel(st.freq === w)));
+    const profile = [
+      { label: 'Acidity', word: 'Bright', w: '80%' },
+      { label: 'Sweetness', word: 'High', w: '72%' },
+      { label: 'Body', word: 'Light, tea-like', w: '34%' },
+      { label: 'Roast', word: 'Light', w: '24%' }
+    ];
+    const total = each * st.qty;
+    const perKg = Math.round(each / (size.g / 1000));
+    const desc = st.qty + ' × ' + size.title + ', ' + grindName;
+    return {
+      galleryAll: imgs.map((m, i) => ({ src: m.src, alt: i === st.img ? m.alt : '', pos: m.pos, op: i === st.img ? '1' : '0', hidden: i === st.img ? 'false' : 'true' })),
+      grindHint: ({ whole: 'Freshest · grind right before brewing', filter: 'Balanced · clean, bright cup', espresso: 'Fuller · concentrated and sweet', press: 'Rounder · heavier body' })[st.grindShown],
+      hintOp: st.hintOp,
+      gallery: imgs[st.img], thumbs, profile, purchases, sizes, grinds, freqs, isSub,
+      shipLine: 'Roasted ' + fmt(roastD) + ' · Ships ' + fmt(shipD),
+      isOnce: !isSub,
+      also: [
+        { name: 'Kenya Nyeri', notes: 'Blackcurrant · Grapefruit · Brown sugar', meta: 'Washed · Light-medium', match: '91%', desc: 'Juicy and bright with a sweet finish. Closest to Guji if you enjoy fruit-forward cups.' },
+        { name: 'Colombia Huila', notes: 'Red apple · Caramel · Cocoa', meta: 'Washed · Medium', match: '88%', desc: 'Balanced and sweet, an easy everyday coffee for filter or espresso.' },
+        { name: 'Guatemala Huehuetenango', notes: 'Plum · Dark chocolate · Almond', meta: 'Washed · Medium-dark', match: '86%', desc: 'Rounder and deeper, with stone fruit over a chocolate base.' },
+        { name: 'Brazil Cerrado', notes: 'Milk chocolate · Hazelnut · Toffee', meta: 'Natural · Dark', match: '82%', desc: 'Comforting and nutty, great with milk and in a moka pot.' }
+      ].map((c, i) => { const open = st.alsoOpen === i; return Object.assign(c, { open, expanded: open ? 'true' : 'false', rot: open ? 'rotate(45deg)' : 'rotate(0deg)', toggle: () => this.setState({ alsoOpen: open ? -1 : i }) }); }),
+      benefit: isSub ? '5% off every delivery: €' + size.sub + ' instead of €' + size.one + ' per ' + size.title + ' bag · skip, pause or cancel anytime' : 'Subscribe and pay €' + size.sub + ' instead of €' + size.one + ' per bag',
+      benefitColor: isSub ? '#3F5A43' : '#5E5145',
+      termsText: 'Every ' + st.freq + ' weeks · €' + each * st.qty + ' per delivery · Next charge ' + (() => { const d = new Date(now); d.setDate(now.getDate() + st.freq * 7); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); })(),
+      totalText: '€' + (st.shownTotal == null ? total : st.shownTotal), wasText: '€' + size.one * st.qty,
+      barDesc: size.title + ' · ' + grindName + (isSub ? ' · every ' + st.freq + ' weeks' : ' · one-time') + (st.qty > 1 ? ' · × ' + st.qty : ''),
+      barCta: st.added ? 'Added ✓' : (isSub ? 'Subscribe' : 'Add to bag'),
+      barY: st.bar ? '0' : '140%', barOp: st.bar ? '1' : '0', barPe: st.bar ? 'auto' : 'none', barHidden: st.bar ? 'false' : 'true', barTab: st.bar ? '0' : '-1',
+      summary: isSub ? (desc + ' · every ' + st.freq + ' weeks') : (desc + ' · one-time'),
+      unitText: '€' + perKg + ' / kg' + (isSub ? ' · You save €' + (size.one - size.sub) * st.qty + ' per delivery' : ' · Subscribe to save 5%'),
+      shipText: total > 30 ? 'Free delivery' : 'Shipping calculated at checkout (free over €30)',
+      qty: st.qty, qtyNote: isSub ? (st.qty === 1 ? 'bag per delivery' : 'bags per delivery') : (st.qty === 1 ? 'bag' : 'bags'),
+      dec: () => { if (st.qty > 1) this.setState({ qty: st.qty - 1, added: false }); },
+      inc: () => { if (st.qty < maxQ) this.setState({ qty: st.qty + 1, added: false }); },
+      decOff: st.qty <= 1 ? 'true' : 'false', decCur: st.qty <= 1 ? 'not-allowed' : 'pointer', decColor: st.qty <= 1 ? '#B3A596' : '#22180F',
+      incOff: st.qty >= maxQ ? 'true' : 'false', incCur: st.qty >= maxQ ? 'not-allowed' : 'pointer', incColor: st.qty >= maxQ ? '#B3A596' : '#22180F',
+      hasBag: st.cart > 0, bagCount: st.cart, bagLabel: 'Bag, ' + st.cart + (st.cart === 1 ? ' item' : ' items'),
+      bump: st.bump ? 'scale(1.18)' : 'scale(1)',
+      bagStatus: 'Added ' + st.last + '. ' + st.cart + (st.cart === 1 ? ' bag' : ' bags') + ' in total.',
+      addLabel: st.added ? 'Added ✓ Add more' : (isSub ? 'Subscribe · €' + total : 'Add to bag · €' + total),
+      addBg: st.added ? '#4A6B4F' : '#8A4F26',
+      add: () => {
+        this.setState({ added: true, cart: st.cart + st.qty, bump: true, last: desc + (isSub ? ' to your subscription' : ' to your bag') });
+        clearTimeout(this._bumpT);
+        this._bumpT = setTimeout(() => this.setState({ bump: false }), 260);
+      }
+    };
+  }
+}
+DC.mount(Component);
+</script>
+</body>
+</html>
