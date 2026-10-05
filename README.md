@@ -5,7 +5,10 @@ Specialty coffee subscription that adapts to every rating. UI/UX case study by *
 ![Roastline](hero.jpg)
 
 **Live site:** https://tanyaaisen07-uiux.github.io/roastline/
-**Figma (design system + prototype):** https://www.figma.com/design/vTIFRXBgfBX3eqYYO0cDC7
+
+**Prototype:** https://www.figma.com/proto/vTIFRXBgfBX3eqYYO0cDC7/Roastline?node-id=11-2&starting-point-node-id=11%3A2
+
+**Figma file (design system, components, screens):** https://www.figma.com/design/vTIFRXBgfBX3eqYYO0cDC7
 
 ## What's inside
 - **Landing:** hero, taste profile sliders with live match, "The Loop" experience, plans with delivery frequency, origin story, FAQ
