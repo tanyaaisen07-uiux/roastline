@@ -522,7 +522,7 @@ class Component extends DCLogic {
       const on = i === st.step;
       return {
         num: '0' + (i + 1), title: s.title, pressed: on ? 'true' : 'false',
-        arrow: i < stepsData.length - 1 ? '→' : '↻',
+        arrow: i < stepsData.length - 1 ? '→' : '',
         bg: on ? '#F6F2EC' : 'transparent', fg: on ? '#22180F' : '#F6F2EC', border: on ? '#F6F2EC' : '#5A4A3B',
         pick: () => { if (this._loopRaf) { cancelAnimationFrame(this._loopRaf); this._loopRaf = null; } this.setState({ step: i, loopP: (i + 1) / 5 }); }
       };
