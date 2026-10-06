@@ -48,6 +48,27 @@ input[type=range]{transition:accent-color .2s ease}
 </style>
 <script src="morphdom.min.js"></script>
 <script src="runtime.js"></script>
+<style id="rl-mobile">
+/* Mobile layout (390px and up to 720px) */
+.rl-only-m{display:none}
+@media (max-width: 720px){
+.rl-only-m{display:flex}
+.rl-hide-m{display:none !important}
+[style*="max-width: 1280px"],[style*="max-width: 1120px"],[style*="max-width: 760px"]{padding-left:20px !important;padding-right:20px !important}
+[style*="padding: 128px 32px"],[style*="padding: 120px 32px"],[style*="padding: 112px 32px"],[style*="padding: 88px 32px"]{padding-top:72px !important;padding-bottom:72px !important}
+[style*="padding: 120px 32px 0"],[style*="padding: 112px 32px 0"]{padding-bottom:0 !important}
+[style*="padding: 32px 32px 112px"],[style*="padding: 40px 32px 104px"],[style*="padding: 0 32px 112px"],[style*="padding: 56px 32px 96px"]{padding-bottom:72px !important}
+[style*="padding: 56px 32px 96px"]{padding-top:24px !important}
+[style*="gap: 64px"]{gap:40px !important}
+[style*="gap: 48px 88px"]{gap:32px !important}
+[style*="gap: 56px"]{gap:36px !important}
+.rl-hdr{padding:16px 20px !important;flex-wrap:nowrap !important}
+.rl-hdr nav{gap:16px !important;flex-wrap:nowrap !important;font-size:14px !important}
+.rl-hdr .rl-btn{padding:10px 16px !important;font-size:14px !important;white-space:nowrap}
+.rl-nowrap{white-space:nowrap}
+aside[aria-label="Order summary"]{position:static !important}
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
